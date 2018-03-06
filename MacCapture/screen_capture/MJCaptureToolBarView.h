@@ -21,16 +21,15 @@
     ///add by aries{
     MJCImageButton *btnMosaic_;
     MJCImageButton* fuzzyDegreeImageView_;  //模糊度
-    //NSSlider* mosaicSlider_;  //模糊度滑块
     CustomSlider* mosaicSlider_;  //模糊度滑块
     ///}
     MJCImageButton *btnRectangle_;
     MJCImageButton *btnCircle_;
-    MJCImageButton *btnTriangleArrow_;
-    MJCImageButton *btnBrush_;
-    MJCImageButton *btnText_;
-    MJCImageButton *btnUndo_;
-    MJCImageButton *btnSave_;
+    MJCImageButton *btnTriangleArrow_;//箭头
+    MJCImageButton *btnBrush_;//刷
+    MJCImageButton *btnText_;//文字
+    MJCImageButton *btnUndo_;//返回
+    MJCImageButton *btnSave_;//报错
     MJCImageButton *btnCancel_;
     MJCImageButton *btnOK_;
     

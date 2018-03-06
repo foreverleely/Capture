@@ -13,11 +13,6 @@
 
 @interface MJCaptureAssetView : NSView{
     NSTrackingArea *trackingArea_;
-//    BOOL isEditing_;
-    
-//    NSPoint firstMouseDonwPoint_;
-//    NSPoint lastMousePoint_;
-    
     NSMutableArray *brushPoint_;
     NSMutableArray *slideArrayView_;
     

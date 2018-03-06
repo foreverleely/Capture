@@ -11,8 +11,14 @@
 #import "SnipManager.h"
 
 #import "MJCaptureInfoView.h"
-#import "MJCaptureModel.h"
+#import "MJCaptureToolBarView.h"
+#import "MJCaptureAssetView.h"
+#import "MJCaptureInfoView.h"
+#import "MJMosaicView.h"
+#import "MJMosaicUtil.h"
+#import "MJPersistentUtil.h"
 
+#import "AppDelegate.h"
 const int kDRAG_POINT_NUM = 8;
 const int kDRAG_POINT_LEN = 5;
 
@@ -24,15 +30,17 @@ const int kDRAG_POINT_LEN = 5;
 @end
 
 @implementation SnipView
-
-- (instancetype)initWithCoder:(NSCoder *)coder
+- (instancetype)initWithFrame:(NSRect)frame
 {
-
-    if (self = [super initWithCoder:coder]) {
-        //_rectArray = [NSMutableArray array];
-        
-    }
-    return self;
+  self = [super initWithFrame:frame];
+  if (self) {
+    _funType = MJCToolBarFunRectangle;
+    _nLineWidth = 3;
+    _brushColor  = [NSColor redColor];
+    _nFontSize = 16;
+    _isAfterClean = NO;
+  }
+  return self;
 }
 
 - (void)setupTrackingArea:(NSRect)rect
@@ -116,6 +124,9 @@ const int kDRAG_POINT_LEN = 5;
         }
       //
       [self reSetLeftTopInfoView];
+      //设置工具栏
+      [self reSetToolbarView];
+      
     }
     // Drawing code here.
     NSEnableScreenUpdates();
@@ -123,6 +134,19 @@ const int kDRAG_POINT_LEN = 5;
 
 - (void)setupTool
 {
+ 
+  _assetView = [[MJCaptureAssetView alloc] initWithFrame:NSMakeRect(0, 0, 350, 40)];
+  [self addSubview:_assetView];
+  [_assetView setHidden:YES];
+  
+  _toolbarView = [[MJCaptureToolBarView alloc] initWithFrame:NSMakeRect(0, 0, 416 + 32, 44)];
+  [self addSubview:_toolbarView];
+  [_toolbarView setHidden:YES];
+  
+  _slideShapeView = [[MJSlideShapeView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
+  [self addSubview:_slideShapeView];
+  [_slideShapeView setHidden:YES];
+  
   _zoomInfoView = [[MJCaptureZoomInfoView alloc] initWithFrame:NSMakeRect(0, 0, 0, 0)];
   [self addSubview:_zoomInfoView];
   
@@ -131,6 +155,8 @@ const int kDRAG_POINT_LEN = 5;
   
   [self setZoomAndPointViewHide:YES];
   
+  [_toolbarView setWantsLayer:YES];
+  [_assetView setWantsLayer:YES];
 }
 
 - (void)setZoomAndPointViewHide:(BOOL)isHidde {
@@ -203,4 +229,260 @@ const int kDRAG_POINT_LEN = 5;
   [_pointInfoView setFrame:rect];
   [_pointInfoView SetLeftTopPoint:NSMakePoint(_drawingRect.size.width - 2 * _nLineWidth, _drawingRect.size.height - 2 * _nLineWidth)];
 }
+
+- (void)reSetToolbarView {
+  [_toolbarView setFrameOrigin:NSMakePoint(_drawingRect.origin.x+_drawingRect.size.width-_toolbarView.frame.size.width, _drawingRect.origin.y-_toolbarView.frame.size.height)];
+}
+
+- (void)CleanOpationAndReStart{
+  _isAfterClean = YES;
+  //设置状态
+  [_toolbarView setHidden:YES];
+  
+  [_assetView removeFromSuperview];
+  _assetView = [[MJCaptureAssetView alloc] initWithFrame:NSMakeRect(0, 0, 350, 40)];
+  [self addSubview:_assetView];
+  [_assetView setHidden:YES];
+  
+  [self setNeedsDisplay:YES];
+}
+
+- (BOOL)isHiddenSlideShapeView{
+  return [_slideShapeView isHidden];
+}
+
+- (void)showSlideShapeView:(MJCaptureSlideView*)view{
+  [_slideShapeView setHidden:NO];
+  [[_slideShapeView window] makeFirstResponder:_slideShapeView];
+  NSRect rect = [view frame];
+  rect = NSInsetRect(rect, view.nLineWidth_/2.0, view.nLineWidth_/2.0);
+  rect = NSOffsetRect(rect, -_slideShapeView.nSpace_/2.0, -_slideShapeView.nSpace_/2.0);
+  rect.size = NSMakeSize(rect.size.width+_slideShapeView.nSpace_, rect.size.height+_slideShapeView.nSpace_);
+  rect = [self convertRect:rect fromView:_assetView];
+  [_slideShapeView setFrame:rect];
+  
+  [_slideShapeView reDrawFocusPoint:rect];
+  [_assetView setIsDragging:NO];
+  [_slideShapeView setNeedsDisplay:YES];
+}
+
+- (void)setToolbarhidde:(BOOL)isHidde{
+  [self.toolbarView setHidden:isHidde];
+}
+
+- (void)hideSlideShapeView{
+  [_slideShapeView setHidden:YES];
+}
+- (void)upSelectSlideViewRect{
+  NSArray *array = [_assetView subviews];
+  for (int i = 0; i < [array count]; i++){
+    NSView* viewAt = [array objectAtIndex:i];
+    if([viewAt isKindOfClass:[MJCaptureSlideView class]]){
+      MJCaptureSlideView *view = [array objectAtIndex:i];
+      if ((view.isMouseDown_ && view.isHasForcus_) || ((view.funType_ == MJCToolBarFunText) && ((view.isMouseDown_ || view.isHasForcus_)))) {
+        NSRect rect = [_slideShapeView frame];
+        rect = NSOffsetRect(rect, _slideShapeView.nSpace_/2.0, _slideShapeView.nSpace_/2.0);
+        rect.size = NSMakeSize(rect.size.width-_slideShapeView.nSpace_, rect.size.height-_slideShapeView.nSpace_);
+        
+        rect = NSOffsetRect(rect, -view.nLineWidth_/2.0, -view.nLineWidth_/2.0);
+        rect.size = NSMakeSize(rect.size.width+view.nLineWidth_, rect.size.height+view.nLineWidth_);
+        
+        rect = [_assetView convertRect:rect fromView:self];
+        [view setFrame:rect];
+        break;
+      }
+    }
+  }
+}
+- (void)makeSelectSlideTextViewFocus{
+  NSArray *array = [_assetView subviews];
+  for (int i = 0; i < [array count]; i++){
+    MJCaptureSlideView *view = [array objectAtIndex:i];
+    if (view.funType_ == MJCToolBarFunText && (view.isMouseDown_ || view.isHasForcus_)) {
+      [view makeSelectSlideTextViewFocus];
+      break;
+    }
+  }
+}
+
+- (void)makeTextViewFocus{
+  NSArray *array = [_assetView subviews];
+  for (int i = 0; i < [array count]; i++){
+    MJCaptureSlideView *view = [array objectAtIndex:i];
+    if (view.funType_ == MJCToolBarFunText) {
+      [view makeSelectSlideTextViewFocus];
+      break;
+    }
+  }
+}
+
+- (void)upSelectSlideViewColor{
+  NSArray *array = [_assetView subviews];
+  for (int i = 0; i < [array count]; i++){
+    MJCaptureSlideView *view = [array objectAtIndex:i];
+    BOOL isWantMouseDown = NO;
+    if (view.funType_ == MJCToolBarFunText && view.isHasForcus_) {
+      isWantMouseDown  = YES;
+    }else{
+      if (view.isHasForcus_ && view.isMouseDown_) {
+        isWantMouseDown = YES;
+      }
+    }
+    if (view.isHasForcus_ && isWantMouseDown) {
+      [view setBrushColor:_brushColor];
+      [view setNeedsDisplay:YES];
+      break;
+    }
+  }
+}
+
+- (void)upSelectSlideViewFontSize{
+  NSArray *array = [_assetView subviews];
+  for (int i = 0; i < [array count]; i++){
+    MJCaptureSlideView *view = [array objectAtIndex:i];
+    if (view.funType_ == MJCToolBarFunText && view.isHasForcus_) {
+      [view setNFontSize_:_nFontSize];
+      [view upSelectSlideViewFontSize];
+      [view setNeedsDisplay:YES];
+      break;
+    }
+  }
+}
+#pragma mark key action
+- (BOOL) acceptsFirstResponder{
+  return YES;
+}
+- (BOOL)becomeFirstResponder{
+  return YES;
+}
+- (BOOL)resignFirstResponder{
+  return YES;
+}
+
+- (void)BeginEdit{
+  [SnipManager sharedInstance].captureState = CAPTURE_STATE_EDIT;
+  
+  [_assetView setHidden:NO];
+  NSRect rect = NSInsetRect(_drawingRect, 4, 4/2.0);
+  NSLog(@"BeginEdit:  %@", NSStringFromRect(rect));
+  [_assetView setFrame:rect];
+  [_assetView setNeedsDisplay:YES];
+  
+  //add by aries{
+  if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
+    //先隐藏控件
+    [self hideSlideShapeView];
+    
+    int sliderValue = [[MJPersistentUtil getInstance] sliderValueForType:_funType];
+    if(sliderValue == 0){
+      sliderValue = 6;
+    }
+    
+    NSRect selectRect = rect;
+    selectRect = NSIntegralRect(selectRect);
+    
+    if (![_assetView getMosaicView]) {
+      [_assetView hideSlideArrayView];
+      NSBitmapImageRep* rep = [self bitmapImageRepForCachingDisplayInRect:selectRect];
+      [self cacheDisplayInRect:selectRect toBitmapImageRep:rep];
+      NSImage *image = [[NSImage alloc] init];
+      [image addRepresentation:rep];
+      NSImage* bgImg = [MJMosaicUtil transToMosaicImage:image blockLevel:sliderValue];
+      [_assetView beginMosaic:bgImg foreground:image];
+    } else {
+      [[_assetView getMosaicView] changeLineWidth:3*[SnipManager sharedInstance].nLineWidth];
+    }
+    
+  }
+}
+
+- (void)changeMosaic:(int)sliderValue
+{
+  if(_assetView && _assetView.isHidden==FALSE){
+    [_assetView beginChangeMosaic:sliderValue];
+  }
+}
+
+- (void)CreatSaveImage:(BOOL)isSave{
+  //add by liuchipeng 2016.1.7{
+  [self hideSlideShapeView];
+  [_pointInfoView setHidden:YES];
+  //}
+  [_toolbarView setHidden:YES];
+  NSSound * mySound = [NSSound soundNamed:@"camera"];
+  [mySound play];
+  
+  [_assetView resetSlideFocusNone];
+  [[self window] makeFirstResponder:self];
+  
+  _drawingRect = NSInsetRect(_drawingRect, 4, 4);
+  _drawingRect = NSIntegralRect(_drawingRect);
+  if ([[[self superview] superview] isKindOfClass:[NSScrollView class]]) {
+    [[[self superview] superview] setHidden:YES];
+  }
+  if ([[self superview] isKindOfClass:[NSScrollView class]]) {
+    [[self superview] setHidden:YES];
+  }
+  NSBitmapImageRep* rep = [self bitmapImageRepForCachingDisplayInRect:_drawingRect];
+  [self cacheDisplayInRect:_drawingRect toBitmapImageRep:rep];
+  
+  NSImage *image = [[NSImage alloc] init];
+  [image addRepresentation:rep];
+  
+  AppDelegate *app_delegate = (AppDelegate*)[NSApp delegate];
+  NSScreen *mainScreen = _screen;
+  if ([mainScreen backingScaleFactor] > 1.0) {
+    if (app_delegate.isSavePitureAs1x_){
+      NSImage *tempImage = [self resizeImage:image size:NSMakeSize(_drawingRect.size.width, _drawingRect.size.height)];
+      image = tempImage;
+      rep = [image bitmapImageRepresentation];
+      //[image setSize:NSMakeSize(selectRect.size.width, selectRect.size.height)];
+    }
+  }
+  
+  NSLog(@"app_delegate.isSavePitureAs1x_: %d", app_delegate.isSavePitureAs1x_);
+  if (isSave) {
+    saveCaptureImage([NSString stringWithString:[app_delegate GetSavePath]], rep);
+  }else{
+    if (app_delegate.isSaveToDeskDefault_) {
+      saveCaptureImage([NSString stringWithString:[app_delegate GetSavePath]], rep);
+    }
+    
+    NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+    [pasteboard clearContents];
+    NSArray *copiedObjects = [NSArray arrayWithObject:image];
+    [pasteboard writeObjects:copiedObjects];
+  }
+  [app_delegate sendMessageTo115Browser:image];
+  
+  [_pointInfoView setHidden:NO];
+  [self setNeedsDisplay:YES];
+}
+
+#pragma mark Get Image From MJCaptureAssetView
+- (NSImage*) resizeImage:(NSImage*)sourceImage size:(NSSize)size
+{
+  
+  NSRect targetFrame = NSMakeRect(0, 0, size.width, size.height);
+  NSImage* targetImage = nil;
+  NSImageRep *sourceImageRep =
+  [sourceImage bestRepresentationForRect:targetFrame
+                                 context:nil
+                                   hints:nil];
+  
+  targetImage = [[NSImage alloc] initWithSize:size];
+  
+  [targetImage lockFocus];
+  [sourceImageRep drawInRect: targetFrame];
+  [targetImage unlockFocus];
+  
+  return targetImage;
+}
+/*未加
+- (void)keyDown:(NSEvent *)theEvent{
+  //add by liuchipeng 2016.1.6{按下方向键移动选择框
+*/
+
+//Mouse Even
+
 @end

@@ -277,6 +277,9 @@ const int kAdjustKnown = 8;
 {
   ///鼠标放开隐藏
   [self.snipView setZoomAndPointViewHide:YES];
+  //显示工具栏
+  [self.snipView setToolbarhidde:NO];
+   
   //第一次点击或者移动中点击放开
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_FIRSTMOUSEDOWN || [SnipManager sharedInstance].captureState == CAPTURE_STATE_READYADJUST) {
         [SnipManager sharedInstance].captureState = CAPTURE_STATE_ADJUST;
@@ -326,7 +329,7 @@ const int kAdjustKnown = 8;
     }
   //移动整个截图区域
     else if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_ADJUST) {
-      //显示左上角视图
+      //显示
       [self.snipView setZoomAndPointViewHide:NO];
       
       if (self.dragDirection == -1) return;

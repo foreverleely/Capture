@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
+#import "MJCaptureModel.h"
 
 typedef NS_ENUM(NSInteger, CAPTURE_STATE)
 {
@@ -35,17 +36,22 @@ extern const int kKEY_ESC_CODE;
 
 @interface SnipManager : NSObject
 
-@property NSMutableArray *windowControllerArray;
+@property (strong)NSMutableArray *windowControllerArray;
 
-@property NSMutableArray *arrayRect;
+@property (strong)NSMutableArray *arrayRect;
 
 @property CAPTURE_STATE captureState;
 
 @property DRAW_TYPE drawType;
 
-@property NSBundle *bundle;
-
 @property BOOL isWorking;
+
+///add new
+@property int nLineWidth;
+@property MJCToolBarFunType funType;
+@property (strong)NSColor* brushColor;
+@property int nFontSize;
+///
 
 + (instancetype)sharedInstance;
 
@@ -57,5 +63,4 @@ extern const int kKEY_ESC_CODE;
 
 - (NSString* )getExportPath;
 
-- (NSImage *)getImageFromResource:(NSString *) imageName;
 @end

@@ -9,31 +9,13 @@
 #import "MJCaptureToolBarView.h"
 #import "MJCaptureView.h"
 #import "MJPersistentUtil.h"
-
+#import "SnipManager.h"
 
 @implementation MJCaptureToolBarView
 
 - (void)InitButtonsColor{
     NSMutableArray *colorArray = [NSMutableArray array];
-    /*
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.000 green:0.000 blue:0.000 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.502 green:0.502 blue:0.502 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.494 green:0.020 blue:0.039 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.961 green:0.529 blue:0.282 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.216 green:0.506 blue:0.220 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.200 green:0.380 blue:0.804 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.490 green:0.094 blue:0.490 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.094 green:0.596 blue:0.596 alpha:1]];
-    
-    [colorArray addObject:[NSColor colorWithCalibratedRed:1.000 green:1.000 blue:1.000 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.753 green:0.753 blue:0.753 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.973 green:0.239 blue:0.255 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:1.000 green:0.984 blue:0.282 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.612 green:0.784 blue:0.208 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.220 green:0.592 blue:0.875 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.933 green:0.243 blue:0.929 alpha:1]];
-    [colorArray addObject:[NSColor colorWithCalibratedRed:0.180 green:0.859 blue:0.855 alpha:1]];
-     */
+  
     [colorArray addObject:[NSColor colorWithCalibratedRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1]];
     [colorArray addObject:[NSColor colorWithCalibratedRed:127/255.0 green:127/255.0 blue:127/255.0 alpha:1]];
     [colorArray addObject:[NSColor colorWithCalibratedRed:153/255.0 green:0/255.0 blue:0/255.0 alpha:1]];
@@ -61,18 +43,12 @@
                                fontSize:(CGFloat)fontSize
                                  action:(SEL)action
                                    rect:(NSRect)rect{
-    //- (MJCImageButton*)addButtonWithImageID:(int)image_id titleID:(NSString *)title
-    //                                 fontSize:(CGFloat)fontSize
-    //                                   action:(SEL)action {
-    //    base::scoped_nsobject<MJCImageButton> button([[MJCImageButton alloc] initWithFrame:NSZeroRect]);
+  
     MJCImageButton* button = [[[MJCImageButton alloc] initWithFrame:rect] autorelease];
     [[button cell] setBordered:NO];
     [button setTarget:self];
     [button setAction:action];
     [button setToolTip:title];
-    //    ResourceBundle& rb = ResourceBundle::GetSharedInstance();
-    //    NSImage* image = rb.GetNativeImageNamed(image_id).ToNSImage();
-    //    [button setImage:image];
     [button setImage:[NSImage imageNamed:imageName]];
     [button setTitle:@""];
     [self addSubview:button];
@@ -156,15 +132,12 @@
         
         
         btnRect = NSMakeRect(btnRectangle_.frame.origin.x, nSpace_, btnWidth_, btnHeight_);
-        //btnRect = NSMakeRect(leftOffset - 4 * nSpace_ + 2, nSpace_, btnWidth_, btnHeight_);
         btnLineWidthSmall_ = [[[self addButtonWithImageID:@"mj_capture_small_circle" titleID:@"小" fontSize:12 action:@selector(btnAction:) rect:btnRect] retain] autorelease];
         [btnLineWidthSmall_ setHidden:YES];
         btnRect.origin.x += btnWidth_;
-        //btnRect.origin.x += btnWidth_ + 2 * nSpace_ + 1;
         btnLineWidthMid_ = [[[self addButtonWithImageID:@"mj_capture_mid_circle" titleID:@"中" fontSize:12 action:@selector(btnAction:) rect:btnRect] retain] autorelease];
         [btnLineWidthMid_ setHidden:YES];
         btnRect.origin.x += btnWidth_;
-        //btnRect.origin.x += btnWidth_ + 2 * nSpace_;
         btnLineWidthBig_ = [[[self addButtonWithImageID:@"mj_capture_big_circle" titleID:@"大" fontSize:12 action:@selector(btnAction:) rect:btnRect] retain] autorelease];
         [btnLineWidthBig_ setHidden:YES];
         btnLineWidthSmall_.mouse_stype_ = MJCImageButtonHover;
@@ -174,32 +147,14 @@
         btnSelectColor_ = [[[self addColorButton:[NSColor redColor] titleID:@"" action:@selector(btnColorAction:) rect:NSMakeRect(btnRect.origin.x, (frame.size.height - btnHeight_ ) / 2 - 1, btnRect.size.width, btnRect.size.height)] retain] autorelease];
         [btnSelectColor_ setHidden:YES];
         [self InitButtonsColor];
-        
-        //        textFontImageView_ = [[NSImageView alloc] initWithFrame:[btnLineWidthSmall_ frame]];
-        //        NSImage *textImage = [NSImage imageNamed:@"mj_capture_text"];
-        //        [textImage setFlipped:YES];
-        //        [textFontImageView_ setImage:textImage];
-        //add by aries
+      
         NSRect fuzzyDrgreeRect = [btnSelectColor_ frame];
         fuzzyDrgreeRect.size.width += 10;
         fuzzyDegreeImageView_ = [[[self addButtonWithImageID:@"mj_capture_fuzzy_degree" titleID:@"模糊度" fontSize:12 action:@selector(btnAction:) rect:fuzzyDrgreeRect] retain] autorelease];
         [fuzzyDegreeImageView_ setEnabled:NO];
         [self addSubview:fuzzyDegreeImageView_];
         [fuzzyDegreeImageView_ setHidden:YES];
-        
-        /*
-        NSRect mosaicSliderRect = [fuzzyDegreeImageView_ frame];
-        mosaicSliderRect.origin.x = mosaicSliderRect.origin.x + mosaicSliderRect.size.width + 20;
-        mosaicSliderRect.size.width = 210;
-        mosaicSlider_ = [[NSSlider alloc] initWithFrame:mosaicSliderRect];
-        mosaicSlider_.minValue = 1;
-        mosaicSlider_.maxValue = 100;
-        [mosaicSlider_ setTarget:self];
-        [mosaicSlider_ setAction:@selector(btnAction:)];
-        //[mosaicSlider_ setAction:@selector(btnAction1:)];
-        [self addSubview:mosaicSlider_];
-        [mosaicSlider_ setHidden:YES];
-        */
+      
         NSRect mosaicSliderRect = [fuzzyDegreeImageView_ frame];
         mosaicSliderRect.origin.x = mosaicSliderRect.origin.x + mosaicSliderRect.size.width + 20;
         mosaicSliderRect.size.width = 210;
@@ -266,21 +221,13 @@
 
 - (void) valueChanged:(CGFloat)newValue
 {
-    MJCToolBarFunType type = ((MJCaptureView*)[self superview]).funType_;
-    /*
-    if(newValue < 2)
-        newValue = 6;
-    if(newValue > 95)
-        newValue = 30;
-    [((MJCaptureView*)[self superview]) changeMosaic:newValue];
+  
+    MJCToolBarFunType type = [SnipManager sharedInstance].funType;
     
-    [MJPersistentUtil setSliderValue:newValue];
-     */
     int changeValue = 0;
     if(newValue < 2){
         changeValue = 6;
         [((MJCaptureView*)[self superview]) changeMosaic:changeValue];
-        //[MJPersistentUtil setSliderValue:0];
         [[MJPersistentUtil getInstance] setSliderValueForType:type sliderValue:0];
     }
     else if(newValue > 95){
@@ -314,13 +261,13 @@
         NSString *str = [(NSMenuItem*)sender title];
         int fontSize = [str intValue];
         
-        ((MJCaptureView*)[self superview]).nFontSize_ = fontSize;
+        [SnipManager sharedInstance].nFontSize = fontSize;
         [((MJCaptureView*)[self superview]) upSelectSlideViewFontSize];
         NSLog(@"selectMenuIndex: %@,   %d", sender, fontSize);
         
         ///add by aries{
         //[MJPersistentUtil setTextSize:fontSize];
-        [[MJPersistentUtil getInstance] setTextSizeForType:((MJCaptureView*)[self superview]).funType_ textSize:fontSize];
+        [[MJPersistentUtil getInstance] setTextSizeForType:[SnipManager sharedInstance].funType textSize:fontSize];
         ///
     }
 }
@@ -355,7 +302,7 @@
 }
 
 - (void)ResetFunType:(MJCToolBarFunType)type{
-    ((MJCaptureView*)[self superview]).funType_ = type;
+    [SnipManager sharedInstance].funType = type;
     
     if (!isShowSubFunction_) {
         NSRect oldRect = [self frame];
@@ -408,16 +355,16 @@
             [[btnColorArray_ objectAtIndex:i] setHidden:NO];
             btnColorRect.origin.x += btnColorLenght+btnWColorSpace;
         }
-        
+        /*
         NSRect sreenRect = [[NSScreen mainScreen] frame];
         if (!NSContainsRect(sreenRect, self.frame)) {
             [((MJCaptureView*)[self superview]) ReCalculateViewFrameChangeSize:NO event:[NSApp currentEvent]];
-        }
+        }*/
         [self setNeedsDisplay:YES];
     }
     isShowSubFunction_ = YES;
     
-    //if (!((MJCaptureView*)[self superview]).isEdit_) {
+    //if (![SnipManager sharedInstance].isEdit_) {
         [((MJCaptureView*)[self superview]) BeginEdit];
     //}
 }
@@ -617,7 +564,7 @@
     
     
     else if ([btnLineWidthSmall_ isEqual:sender]) {
-        ((MJCaptureView*)[self superview]).nLineWidth_ = 3;
+        [SnipManager sharedInstance].nLineWidth = 3;
         
         btnLineWidthSmall_.mouse_stype_ = MJCImageButtonHover;
         [btnLineWidthSmall_ setNeedsDisplay];
@@ -626,13 +573,13 @@
         btnLineWidthBig_.mouse_stype_ = MJCImageButtonNormal;
         [btnLineWidthBig_ setNeedsDisplay];
         //add by aries
-        [[MJPersistentUtil getInstance] setLineWidthForType:((MJCaptureView*)[self superview]).funType_ lineWidth:3];
-        if(((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunMosaic){
+        [[MJPersistentUtil getInstance] setLineWidthForType:[SnipManager sharedInstance].funType lineWidth:3];
+        if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
             [((MJCaptureView*)[self superview]) BeginEdit];
         }
         ///}
     }else if ([btnLineWidthMid_ isEqual:sender]) {
-        ((MJCaptureView*)[self superview]).nLineWidth_ = 6;
+        [SnipManager sharedInstance].nLineWidth = 6;
         
         btnLineWidthSmall_.mouse_stype_ = MJCImageButtonNormal;
         [btnLineWidthSmall_ setNeedsDisplay];
@@ -641,13 +588,13 @@
         btnLineWidthBig_.mouse_stype_ = MJCImageButtonNormal;
         [btnLineWidthBig_ setNeedsDisplay];
         //add by aries
-        [[MJPersistentUtil getInstance] setLineWidthForType:((MJCaptureView*)[self superview]).funType_ lineWidth:6];
-        if(((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunMosaic){
+        [[MJPersistentUtil getInstance] setLineWidthForType:[SnipManager sharedInstance].funType lineWidth:6];
+        if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
             [((MJCaptureView*)[self superview]) BeginEdit];
         }
         ///}
     }else if ([btnLineWidthBig_ isEqual:sender]) {
-        ((MJCaptureView*)[self superview]).nLineWidth_ = 12;
+        [SnipManager sharedInstance].nLineWidth = 12;
         
         btnLineWidthSmall_.mouse_stype_ = MJCImageButtonNormal;
         [btnLineWidthSmall_ setNeedsDisplay];
@@ -656,8 +603,8 @@
         btnLineWidthBig_.mouse_stype_ = MJCImageButtonHover;
         [btnLineWidthBig_ setNeedsDisplay];
         //add by aries
-        [[MJPersistentUtil getInstance] setLineWidthForType:((MJCaptureView*)[self superview]).funType_ lineWidth:12];
-        if(((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunMosaic){
+        [[MJPersistentUtil getInstance] setLineWidthForType:[SnipManager sharedInstance].funType lineWidth:12];
+        if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
             [((MJCaptureView*)[self superview]) BeginEdit];
         }
         
@@ -668,10 +615,9 @@
     else if([btnMosaic_ isEqual:sender]){
         seletedBtnRectX = btnMosaic_.frame.origin.x - 4;
         //读取配置文件
-        ((MJCaptureView*)[self superview]).funType_ = MJCToolBarFunMosaic;
+        [SnipManager sharedInstance].funType = MJCToolBarFunMosaic;
         [self setLineWithBtnStateFromConfig];
         [self setSliderValueFromConfig];
-        //
         [self ResetFunType:MJCToolBarFunMosaic];
         //隐藏不需要的控件
         [textFontImageView_ setHidden:YES];
@@ -687,9 +633,7 @@
         [btnLineWidthBig_ setHidden:NO];
         [fuzzyDegreeImageView_ setHidden:NO];
         [mosaicSlider_ setHidden:NO];
-        
-        //[self setLineWithBtnStateFromConfig];
-        //[self setSliderValueFromConfig];
+      
         
     }
     else if([mosaicSlider_ isEqual:sender]){
@@ -712,15 +656,13 @@
     if (![btnSelectColor_ isEqual:sender]) {
         btnSelectColor_.bgNormalColor = ((MJCaptureColorButton*)sender).bgNormalColor;
         
-        ((MJCaptureView*)[self superview]).brushColor_ = btnSelectColor_.bgNormalColor;
+        [SnipManager sharedInstance].brushColor = btnSelectColor_.bgNormalColor;
         //[((MJCaptureView*)[self superview]) upSelectSlideViewColor];
         
         [btnSelectColor_ setNeedsDisplay:YES];
-        
-        //[MJPersistentUtil setBrushColor:btnSelectColor_.bgNormalColor];
-        //[[MJPersistentUtil getInstance] setBrushColorForType:((MJCaptureView*)[self superview]).funType_ brushColor:btnSelectColor_.bgNormalColor];
+      
         long long index = [btnColorArray_ indexOfObject:((MJCaptureColorButton*)sender)];
-        MJCToolBarFunType type = ((MJCaptureView*)[self superview]).funType_;
+        MJCToolBarFunType type = [SnipManager sharedInstance].funType;
         [[MJPersistentUtil getInstance] setBrushColorForType:type brushColor:(int)index];
     }
 }
@@ -812,7 +754,7 @@
 
 -(void)ResetLingWidthType:(int)nLineWidth_ {
     if (nLineWidth_==4) {
-        ((MJCaptureView*)[self superview]).nLineWidth_ = 4;
+        [SnipManager sharedInstance].nLineWidth = 4;
         btnLineWidthSmall_.mouse_stype_ = MJCImageButtonHover;
         [btnLineWidthSmall_ setNeedsDisplay];
         btnLineWidthMid_.mouse_stype_ = MJCImageButtonNormal;
@@ -820,7 +762,7 @@
         btnLineWidthBig_.mouse_stype_ = MJCImageButtonNormal;
         [btnLineWidthBig_ setNeedsDisplay];
     }else if (nLineWidth_==6) {
-        ((MJCaptureView*)[self superview]).nLineWidth_ = 6;
+        [SnipManager sharedInstance].nLineWidth = 6;
         
         btnLineWidthSmall_.mouse_stype_ = MJCImageButtonNormal;
         [btnLineWidthSmall_ setNeedsDisplay];
@@ -829,7 +771,7 @@
         btnLineWidthBig_.mouse_stype_ = MJCImageButtonNormal;
         [btnLineWidthBig_ setNeedsDisplay];
     }else if (nLineWidth_==12) {
-        ((MJCaptureView*)[self superview]).nLineWidth_ = 12;
+        [SnipManager sharedInstance].nLineWidth = 12;
         
         btnLineWidthSmall_.mouse_stype_ = MJCImageButtonNormal;
         [btnLineWidthSmall_ setNeedsDisplay];
@@ -848,8 +790,8 @@
 }
 
 -(void) setLineWithBtnStateFromConfig{
-    //int lineWidth = [[MJPersistentUtil getInstance] lineWidthForType:((MJCaptureView*)[self superview]).funType_];
-    MJCToolBarFunType type = ((MJCaptureView*)[self superview]).funType_;
+  
+    MJCToolBarFunType type = [SnipManager sharedInstance].funType;
     int lineWidth = [[MJPersistentUtil getInstance] lineWidthForType:type];
     if(lineWidth == 3){
         btnLineWidthSmall_.mouse_stype_ = MJCImageButtonHover;
@@ -874,61 +816,23 @@
         [btnLineWidthBig_ setNeedsDisplay];
     }
     
-    ((MJCaptureView*)[self superview]).nLineWidth_ = lineWidth;
+    [SnipManager sharedInstance].nLineWidth = lineWidth;
 }
 
 -(void) setBrushColorFromConfig{
-    /*
-    NSColor* color = [MJPersistentUtil brushColor];
-    if(color != nil){
-        btnSelectColor_.bgNormalColor = color;
-        [btnSelectColor_ setNeedsDisplay:YES];
-    }
-     */
-    /*
-    NSColor* color = [[MJPersistentUtil getInstance] brushColorForType:((MJCaptureView*)[self superview]).funType_];
-    if(color != nil){
-        btnSelectColor_.bgNormalColor = color;
-        [btnSelectColor_ setNeedsDisplay:YES];
-    }
-     */
-    MJCToolBarFunType type = ((MJCaptureView*)[self superview]).funType_;
+    
+    MJCToolBarFunType type = [SnipManager sharedInstance].funType;
     int index = [[MJPersistentUtil getInstance] brushColorForType:type];
     MJCaptureColorButton* btn = [btnColorArray_ objectAtIndex:index];
     btnSelectColor_.bgNormalColor = btn.bgNormalColor;
     [btnSelectColor_ setNeedsDisplay:YES];
     
-    ((MJCaptureView*)[self superview]).brushColor_ = btnSelectColor_.bgNormalColor;
+    [SnipManager sharedInstance].brushColor = btnSelectColor_.bgNormalColor;
 }
 
 -(void) setTextSizeFromConfig{
-    /*
-    int size = [MJPersistentUtil textSize];
-    NSString *stringSize = [NSString stringWithFormat:@"%d",size];
-    
-    NSInteger index = [ratiomenu indexOfItemWithTitle:stringSize];
-    if(index != -1){
-        //[ratiomenu selectItemAtIndex:index];
-        [ibratiomenu setTitle:stringSize];
-        ibratiomenu.stritemname = stringSize;
-        [ibratiomenu setNeedsDisplay];
-        NSLog(stringSize);
-    }
-     */
-    /*
-    int size = [[MJPersistentUtil getInstance] textSizeForType:((MJCaptureView*)[self superview]).funType_];
-    NSString *stringSize = [NSString stringWithFormat:@"%d",size];
-    
-    NSInteger index = [ratiomenu indexOfItemWithTitle:stringSize];
-    if(index != -1){
-        //[ratiomenu selectItemAtIndex:index];
-        [ibratiomenu setTitle:stringSize];
-        ibratiomenu.stritemname = stringSize;
-        [ibratiomenu setNeedsDisplay];
-        NSLog(stringSize);
-    }
-     */
-    MJCToolBarFunType type = ((MJCaptureView*)[self superview]).funType_;
+  
+    MJCToolBarFunType type = [SnipManager sharedInstance].funType;
     int size = [[MJPersistentUtil getInstance] textSizeForType:type];
     NSString *stringSize = [NSString stringWithFormat:@"%d",size];
     
@@ -941,7 +845,7 @@
         //NSLog(stringSize);
     }
     
-    ((MJCaptureView*)[self superview]).nFontSize_ = size;
+    [SnipManager sharedInstance].nFontSize = size;
 }
 
 -(void) setSliderValueFromConfig{
@@ -949,7 +853,7 @@
     int sliderValue = [MJPersistentUtil sliderValue];
     [mosaicSlider_ updateSlider:sliderValue];
      */
-    MJCToolBarFunType type = ((MJCaptureView*)[self superview]).funType_;
+    MJCToolBarFunType type = [SnipManager sharedInstance].funType;
     int sliderValue = [[MJPersistentUtil getInstance] sliderValueForType:type];
     [mosaicSlider_ updateSlider:sliderValue];
 }

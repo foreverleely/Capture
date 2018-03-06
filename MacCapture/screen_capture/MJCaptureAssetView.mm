@@ -8,6 +8,7 @@
 
 #import "MJCaptureAssetView.h"
 #import "MJCaptureView.h"
+#import "SnipManager.h"
 
 @implementation MJCaptureAssetView
 
@@ -57,8 +58,9 @@
     [super drawRect:dirtyRect];
     
     if (self.isEditing_) {
-        [((MJCaptureView*)[self superview]).brushColor_ set];
-        switch (((MJCaptureView*)[self superview]).funType_) {
+      
+        [[SnipManager sharedInstance].brushColor set];
+        switch ([SnipManager sharedInstance].funType) {
             case MJCToolBarFunRectangle:
             case MJCToolBarFunCircle:
                 break;
@@ -68,13 +70,13 @@
                   && _firstMouseDonwPoint.y == _lastMousePoint.y){
                 return;
               }
-              if (((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunTriangleArrow &&
-                  fabs(_firstMouseDonwPoint.x-_lastMousePoint.x) < ((MJCaptureView*)[self superview]).nLineWidth_*2 &&
-                  fabs(_firstMouseDonwPoint.y-_lastMousePoint.y) < ((MJCaptureView*)[self superview]).nLineWidth_*2){
+              if ([SnipManager sharedInstance].funType == MJCToolBarFunTriangleArrow &&
+                  fabs(_firstMouseDonwPoint.x-_lastMousePoint.x) < [SnipManager sharedInstance].nLineWidth*2 &&
+                  fabs(_firstMouseDonwPoint.y-_lastMousePoint.y) < [SnipManager sharedInstance].nLineWidth*2){
                 return;
               }
                 CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
-                drawTriangleArrow(context, NSPointToCGPoint(_firstMouseDonwPoint), NSPointToCGPoint(_lastMousePoint), ((MJCaptureView*)[self superview]).nLineWidth_);
+                drawTriangleArrow(context, NSPointToCGPoint(_firstMouseDonwPoint), NSPointToCGPoint(_lastMousePoint), [SnipManager sharedInstance].nLineWidth);
             }
                 break;
             case MJCToolBarFunText:
@@ -92,7 +94,7 @@
                         [brushPath lineToPoint:NSPointFromString([brushPoint_ objectAtIndex:i])];
                     }
                 }
-                [brushPath setLineWidth:((MJCaptureView*)[self superview]).nLineWidth_];
+                [brushPath setLineWidth:[SnipManager sharedInstance].nLineWidth];
                 [brushPath setLineCapStyle:NSRoundLineCapStyle];
                 [brushPath setLineJoinStyle:NSMiterLineJoinStyle];
                 [brushPath stroke];
@@ -134,7 +136,7 @@
   
   
   ///add by aries
-  if(((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunMosaic){
+  if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
     if(mosaicView_){
       [mosaicView_ mouseDown:theEvent];
     }
@@ -151,15 +153,15 @@
     if (!NSPointInRect(_firstMouseDonwPoint, [self bounds]))
     [[self window] makeFirstResponder:self];
     //aries test
-    switch (((MJCaptureView*)[self superview]).funType_) {
+    switch ([SnipManager sharedInstance].funType) {
         case MJCToolBarFunRectangle:
         case MJCToolBarFunCircle:{
             if (!currentAddingView_) {
-                currentAddingView_ = [[MJCaptureSlideView alloc] initWithFrame:NSZeroRect withType:((MJCaptureView*)[self superview]).funType_];
+                currentAddingView_ = [[MJCaptureSlideView alloc] initWithFrame:NSZeroRect withType:[SnipManager sharedInstance].funType];
                 [self addSubview:currentAddingView_];
                 [currentAddingView_.brushPath_ moveToPoint:[currentAddingView_ convertPoint:_firstMouseDonwPoint fromView:self]];
-                [currentAddingView_ setBrushColor:((MJCaptureView*)[self superview]).brushColor_];
-                currentAddingView_.nLineWidth_ = ((MJCaptureView*)[self superview]).nLineWidth_;
+                [currentAddingView_ setBrushColor:[SnipManager sharedInstance].brushColor];
+                currentAddingView_.nLineWidth_ = [SnipManager sharedInstance].nLineWidth;
             }
         }
             break;
@@ -174,10 +176,10 @@
             NSRect rect = NSZeroRect;
             rect.origin = _firstMouseDonwPoint;
             rect.size = NSMakeSize(40, 26);
-            MJCaptureSlideView *slideView = [[MJCaptureSlideView alloc] initWithFrame:rect withType:((MJCaptureView*)[self superview]).funType_];
-            [slideView setBrushColor:((MJCaptureView*)[self superview]).brushColor_];
-            slideView.nLineWidth_ = ((MJCaptureView*)[self superview]).nLineWidth_;
-            slideView.nFontSize_ = ((MJCaptureView*)[self superview]).nFontSize_;
+            MJCaptureSlideView *slideView = [[MJCaptureSlideView alloc] initWithFrame:rect withType:[SnipManager sharedInstance].funType];
+            [slideView setBrushColor:[SnipManager sharedInstance].brushColor];
+            slideView.nLineWidth_ = [SnipManager sharedInstance].nLineWidth;
+            slideView.nFontSize_ = [SnipManager sharedInstance].nFontSize;
             [slideView upSelectSlideViewFontSize];
             
             [self AddCaptureSlideView:slideView];
@@ -191,7 +193,7 @@
 }
 - (void)mouseUp:(NSEvent *)theEvent{
     ///add by aries
-    if(((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
         if(mosaicView_){
             [mosaicView_ mouseUp:theEvent];
         }
@@ -207,7 +209,7 @@
     self.isEditing_ = NO;
     [self setNeedsDisplay:YES];
     
-    switch (((MJCaptureView*)[self superview]).funType_) {
+    switch ([SnipManager sharedInstance].funType) {
         case MJCToolBarFunRectangle:
         case MJCToolBarFunCircle:
         case MJCToolBarFunTriangleArrow:{
@@ -217,9 +219,9 @@
             rect.size.width = fabs(_firstMouseDonwPoint.x-_lastMousePoint.x);
             rect.size.height = fabs(_firstMouseDonwPoint.y-_lastMousePoint.y);
             
-            MJCaptureSlideView *slideView = [[MJCaptureSlideView alloc] initWithFrame:rect withType:((MJCaptureView*)[self superview]).funType_];
-            slideView.nLineWidth_ = ((MJCaptureView*)[self superview]).nLineWidth_;
-            [slideView setBrushColor:((MJCaptureView*)[self superview]).brushColor_];
+            MJCaptureSlideView *slideView = [[MJCaptureSlideView alloc] initWithFrame:rect withType:[SnipManager sharedInstance].funType];
+            slideView.nLineWidth_ = [SnipManager sharedInstance].nLineWidth;
+            [slideView setBrushColor:[SnipManager sharedInstance].brushColor];
             
             rect.origin.x -= slideView.nLineWidth_/2.0;
             rect.origin.y -= slideView.nLineWidth_/2.0;
@@ -229,7 +231,7 @@
             [slideView setFrame:rect];
             slideView.brushPath_ = currentAddingView_.brushPath_;
             
-            if (((MJCaptureView*)[self superview]).funType_ != MJCToolBarFunTriangleArrow &&
+            if ([SnipManager sharedInstance].funType != MJCToolBarFunTriangleArrow &&
               (rect.size.width < slideView.nLineWidth_*1.5 || rect.size.height < slideView.nLineWidth_*1.5)) {
                 if (currentAddingView_) {
                     [currentAddingView_.brushPath_ lineToPoint:[currentAddingView_ convertPoint:_lastMousePoint fromView:self]];
@@ -239,7 +241,7 @@
                 }
                 return;
             }
-          if (((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunTriangleArrow &&
+          if ([SnipManager sharedInstance].funType == MJCToolBarFunTriangleArrow &&
               //(rect.size.width < slideView.nLineWidth_*1.2 || rect.size.height < slideView.nLineWidth_*1.2) &&
               fabs(_firstMouseDonwPoint.x-_lastMousePoint.x) < slideView.nLineWidth_*2 &&
               fabs(_firstMouseDonwPoint.y-_lastMousePoint.y) < slideView.nLineWidth_*2){
@@ -248,7 +250,7 @@
             
             [self AddCaptureSlideView:slideView];
             
-            if (((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunTriangleArrow) {
+            if ([SnipManager sharedInstance].funType == MJCToolBarFunTriangleArrow) {
                 if (rect.size.width < getTriangleArrowWidth()) {
                     rect.origin.x -= (getTriangleArrowWidth()-rect.size.width)/2.0;
                     rect.size.width = getTriangleArrowWidth();
@@ -277,9 +279,9 @@
             [self setNeedsDisplay:YES];
             
             NSRect rect = NSZeroRect;
-            MJCaptureSlideView *slideView = [[MJCaptureSlideView alloc] initWithFrame:rect withType:((MJCaptureView*)[self superview]).funType_];
-            slideView.nLineWidth_ = ((MJCaptureView*)[self superview]).nLineWidth_;
-            [slideView setBrushColor:((MJCaptureView*)[self superview]).brushColor_];
+            MJCaptureSlideView *slideView = [[MJCaptureSlideView alloc] initWithFrame:rect withType:[SnipManager sharedInstance].funType];
+            slideView.nLineWidth_ = [SnipManager sharedInstance].nLineWidth;
+            [slideView setBrushColor:[SnipManager sharedInstance].brushColor];
             
             NSBezierPath *tempPath = [NSBezierPath bezierPath];
             for (int i = 0; i < (int)[brushPoint_ count]; i++) {
@@ -323,7 +325,7 @@
 }
 - (void)mouseEntered:(NSEvent*)theEvent {
     ///add by aries
-    if(((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
         if(mosaicView_){
             [mosaicView_ mouseEntered:theEvent];
         }
@@ -337,7 +339,7 @@
 
 - (void)mouseExited:(NSEvent*)theEvent {
     ///add by aries
-    if(((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
         if(mosaicView_){
             [mosaicView_ mouseExited:theEvent];
         }
@@ -350,7 +352,7 @@
 
 - (void)mouseMoved:(NSEvent *)theEvent{
     ///add by aries
-    if(((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
         if(mosaicView_){
             [mosaicView_ mouseMoved:theEvent];
         }
@@ -365,7 +367,7 @@
 
 - (void)mouseDragged:(NSEvent *)theEvent{
     ///add by aries{
-    if(((MJCaptureView*)[self superview]).funType_ == MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
         if(mosaicView_){
             [mosaicView_ mouseDragged:theEvent];
         }
@@ -380,7 +382,7 @@
     }else{
         _firstMouseDonwPoint =[self convertPoint:pt fromView:nil];
     }
-    switch (((MJCaptureView*)[self superview]).funType_) {
+    switch ([SnipManager sharedInstance].funType) {
         case MJCToolBarFunRectangle:
         case MJCToolBarFunCircle:
         case MJCToolBarFunText:{
@@ -390,10 +392,10 @@
             rect.size.width = fabs(_firstMouseDonwPoint.x-_lastMousePoint.x);
             rect.size.height = fabs(_firstMouseDonwPoint.y-_lastMousePoint.y);
             
-            rect.origin.x -= ((MJCaptureView*)[self superview]).nLineWidth_/2.0;
-            rect.origin.y -= ((MJCaptureView*)[self superview]).nLineWidth_/2.0;
-            rect.size.width += ((MJCaptureView*)[self superview]).nLineWidth_;
-            rect.size.height += ((MJCaptureView*)[self superview]).nLineWidth_;
+            rect.origin.x -= [SnipManager sharedInstance].nLineWidth/2.0;
+            rect.origin.y -= [SnipManager sharedInstance].nLineWidth/2.0;
+            rect.size.width += [SnipManager sharedInstance].nLineWidth;
+            rect.size.height += [SnipManager sharedInstance].nLineWidth;
             rect = NSIntegralRect(rect);
             
             //aries test
@@ -426,7 +428,7 @@
 ///add by aries{
 - (void) beginMosaic:(NSImage*)bgImg foreground:(NSImage*) forImg
 {
-    CGFloat mosaicLineWidth = ((MJCaptureView*)[self superview]).nLineWidth_;
+    CGFloat mosaicLineWidth = [SnipManager sharedInstance].nLineWidth;
     mosaicLineWidth *= 3;
     
     mosaicView_ = [[MJMosaicView alloc] initWithFrame:NSMakeRect(0, 0, [self frame].size.width, [self frame].size.height) backgroundImg:bgImg forgroundImg:forImg lineWidth:mosaicLineWidth];

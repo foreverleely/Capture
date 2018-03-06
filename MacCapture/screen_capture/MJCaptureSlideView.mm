@@ -12,6 +12,7 @@
 #import "MJCaptureAssetView.h"
 #import "MJCaptureModel.h"
 #import "MJCaptureView.h"
+#import "SnipManager.h"
 
 
 @implementation MJCaptureSlideTextView
@@ -615,31 +616,32 @@
 }
 
 -(void)reDrawToolbarView{
+  
     MJCaptureView *mjview = (MJCaptureView*)([[self superview] superview]);
-    
+    //MJCToolBarFunType funType = [SnipManager sharedInstance].funType;
     switch (funType_) {
         case MJCToolBarFunRectangle:{
-            [mjview setFunType_:MJCToolBarFunRectangle];
+            [[SnipManager sharedInstance] setFunType:MJCToolBarFunRectangle];
             [mjview.toolbarView ResetButtonType:MJCToolBarFunRectangle];
         }
             break;
         case MJCToolBarFunCircle:{
-            [mjview setFunType_:MJCToolBarFunCircle];
+            [[SnipManager sharedInstance] setFunType:MJCToolBarFunCircle];
             [mjview.toolbarView ResetButtonType:MJCToolBarFunCircle];
         }
             break;
         case MJCToolBarFunTriangleArrow:{
-            [mjview setFunType_:MJCToolBarFunTriangleArrow];
+            [[SnipManager sharedInstance] setFunType:MJCToolBarFunTriangleArrow];
             [mjview.toolbarView ResetButtonType:MJCToolBarFunTriangleArrow];
         }
             break;
         case MJCToolBarFunBrush:{
-            [mjview setFunType_:MJCToolBarFunBrush];
+            [[SnipManager sharedInstance] setFunType:MJCToolBarFunBrush];
             [mjview.toolbarView ResetButtonType:MJCToolBarFunBrush];
         }
             break;
         case MJCToolBarFunText:{
-            [mjview setFunType_:MJCToolBarFunText];
+            [[SnipManager sharedInstance] setFunType:MJCToolBarFunText];
             [mjview.toolbarView ResetButtonType:MJCToolBarFunText];
         }
             break;
@@ -696,7 +698,7 @@
     MJCaptureSlideView* view = [self getArrowSlideView];
     if ((view.funType_!=MJCToolBarFunTriangleArrow)) {
         NSRect insetRect = NSInsetRect(dirtyRect, nSpanValue_/2.0, nSpanValue_/2.0);
-        [[(MJCaptureView*)[self superview] brushColor_] set];
+        [[SnipManager sharedInstance].brushColor set];
         NSBezierPath *path = [NSBezierPath bezierPathWithRect:insetRect];
         CGFloat patten[2] = {4,4};
         [path setLineDash:patten count:2 phase:1];
@@ -722,7 +724,7 @@
         NSRect insetRect = NSInsetRect(dirtyRect, nSpanValue_/2.0, nSpanValue_/2.0);
         MJCaptureAssetView* aview = (MJCaptureAssetView*)[ArrowSlideView_ superview];
         if(!aview.isDragging){
-            [[(MJCaptureView*)[self superview] brushColor_] set];
+            [[SnipManager sharedInstance].brushColor set];
         }else{
             [[NSColor clearColor] set];
         }
@@ -889,7 +891,7 @@
             [cursor autorelease];
             break;
         case MJCMouseInCropMove:
-            if (((MJCaptureView*)[self superview]).isEdit_) {
+            if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_EDIT) {
                 //                [[self enclosingScrollView] setDocumentCursor:[NSCursor crosshairCursor]];
                 [[self enclosingScrollView] setDocumentCursor:[NSCursor openHandCursor]];
             }else{
@@ -1163,7 +1165,7 @@
     
     MJCaptureSlideView* sview = [self getFocusSlideView];
   [(MJCaptureView*)[self superview] showSlideShapeView:sview];
-  [(MJCaptureView*)[self superview] setFunType_:sview.funType_];
+  [[SnipManager sharedInstance] setFunType:sview.funType_];
   
     //}
 }
@@ -1180,7 +1182,7 @@
     [super mouseDragged:theEvent];
     NSPoint pt = theEvent.locationInWindow;
     
-    if (((MJCaptureView*)[self superview]).isCapture_) {
+    if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_ADJUST) {
         if (firstBeginDrag_) {
             BOOL change = (state_ == MJCMouseInCropMove) ? NO : YES;
             [self mouseDraggeFromChangeFrame:pt isChangeSize:(BOOL)change event:theEvent];

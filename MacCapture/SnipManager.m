@@ -30,6 +30,12 @@ const int kKEY_ESC_CODE = 53;
     dispatch_once(&onceToken, ^(void) {
         sharedSingleton = [[self alloc] init];
         sharedSingleton.windowControllerArray = [NSMutableArray array];
+      
+      sharedSingleton.funType = MJCToolBarFunRectangle;
+      sharedSingleton.nLineWidth = 3;
+      sharedSingleton.brushColor  = [NSColor redColor];
+      sharedSingleton.nFontSize = 16;
+      
       //空间变化时接受通知
         [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:sharedSingleton
                                                                selector:@selector(screenChanged:)
@@ -64,9 +70,9 @@ const int kKEY_ESC_CODE = 53;
 //开始截图
 - (void)startCapture
 {
-
+/*
     if (self.isWorking) return;
-    self.isWorking = YES;
+    self.isWorking = YES;*/
     self.arrayRect = [NSMutableArray array];
   //获取桌面内窗口数量
     NSArray *windows = (__bridge NSArray *) CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
@@ -128,11 +134,4 @@ const int kKEY_ESC_CODE = 53;
     return path;
 }
 
-- (NSImage *)getImageFromResource:(NSString *) imageName {
-    if (self.bundle) {
-        NSString* s =[[self.bundle resourcePath] stringByAppendingPathComponent:imageName];
-        return [[NSImage alloc] initWithContentsOfFile:s];
-    }
-    return nil;
-}
 @end

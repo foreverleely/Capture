@@ -11,6 +11,7 @@
 #import "MJCaptureView.h"
 #import "MJCaptureAssetView.h"
 #import "MJCaptureModel.h"
+#import "SnipManager.h"
 
 @implementation MJDrawerView
 
@@ -45,21 +46,20 @@
     
     MJMosaicView* mosaicView = (MJMosaicView*)[self superview];
     MJCaptureAssetView* assetView = (MJCaptureAssetView*)[mosaicView superview];
-    MJCaptureView* captureView = (MJCaptureView*)[assetView superview];
     //画箭头
-    if(captureView.funType_ == MJCToolBarFunTriangleArrow){
+    if([SnipManager sharedInstance].funType == MJCToolBarFunTriangleArrow){
       if (_firstPoint.x == _lastPoint.x &&
           _firstPoint.y == _lastPoint.y) {
         return;
       }
-        [captureView.brushColor_ set];
+        [[SnipManager sharedInstance].brushColor set];
         
         CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
-        drawTriangleArrow(context, NSPointToCGPoint(_firstPoint), NSPointToCGPoint(_lastPoint), captureView.nLineWidth_);
+        drawTriangleArrow(context, NSPointToCGPoint(_firstPoint), NSPointToCGPoint(_lastPoint), [SnipManager sharedInstance].nLineWidth);
     }
     //画刷
-    else if(captureView.funType_ == MJCToolBarFunBrush && [brushPoint_ count] > 1){
-        [captureView.brushColor_ set];
+    else if([SnipManager sharedInstance].funType == MJCToolBarFunBrush && [brushPoint_ count] > 1){
+        [[SnipManager sharedInstance].brushColor set];
         
         NSBezierPath *brushPath = [NSBezierPath bezierPath];
         for (int i = 0; i < (int)[brushPoint_ count]; i++) {
@@ -69,7 +69,7 @@
                 [brushPath lineToPoint:NSPointFromString([brushPoint_ objectAtIndex:i])];
             }
         }
-        [brushPath setLineWidth:captureView.nLineWidth_];
+        [brushPath setLineWidth:[SnipManager sharedInstance].nLineWidth];
         [brushPath setLineCapStyle:NSRoundLineCapStyle];
         [brushPath setLineJoinStyle:NSMiterLineJoinStyle];
         [brushPath stroke];
@@ -172,17 +172,16 @@
     NSPoint pt = theEvent.locationInWindow;
     
     MJCaptureAssetView* assetView = (MJCaptureAssetView*)[self superview];
-    MJCaptureView* captureView = (MJCaptureView*)[assetView superview];
-    if(captureView.funType_ != MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType != MJCToolBarFunMosaic){
       //如果是画箭头就保存坐标位置
       [drawView_ removeAllObject];
       drawView_.firstPoint = drawView_.lastPoint = [self convertPoint:pt fromView:nil];
         if(![self hasShapeFocus]){
-            if(captureView.funType_ == MJCToolBarFunTriangleArrow){
+            if([SnipManager sharedInstance].funType == MJCToolBarFunTriangleArrow){
                 _firstPoint_ = [self convertPoint:pt fromView:nil];
                 [drawView_ setHidden:NO];
                 drawView_.firstPoint = drawView_.lastPoint = [self convertPoint:pt fromView:nil];
-            }else if(captureView.funType_ == MJCToolBarFunBrush){
+            }else if([SnipManager sharedInstance].funType == MJCToolBarFunBrush){
                 [drawView_ setHidden:NO];
                 [drawView_ addObject:NSStringFromPoint([self convertPoint:pt fromView:nil])];
             }
@@ -234,11 +233,10 @@
 - (void)mouseUp:(NSEvent *)theEvent
 {
     MJCaptureAssetView* assetView = (MJCaptureAssetView*)[self superview];
-    MJCaptureView* captureView = (MJCaptureView*)[assetView superview];
-    if(captureView.funType_ != MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType != MJCToolBarFunMosaic){
         if(![self hasShapeFocus]){
-            if(captureView.funType_ == MJCToolBarFunTriangleArrow ||
-               captureView.funType_ == MJCToolBarFunBrush){
+            if([SnipManager sharedInstance].funType == MJCToolBarFunTriangleArrow ||
+               [SnipManager sharedInstance].funType == MJCToolBarFunBrush){
                 //如果是画箭头或者画刷就关闭绘画view
                 [drawView_ setHidden:YES];
             }
@@ -255,13 +253,12 @@
 - (void)mouseMoved:(NSEvent *)theEvent
 {
     MJCaptureAssetView* assetView = (MJCaptureAssetView*)[self superview];
-    MJCaptureView* captureView = (MJCaptureView*)[assetView superview];
     //改变鼠标样式
-    if(captureView.funType_ == MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
         [self changeCursor];
     }
     //是否需要消息转发
-    if(captureView.funType_ != MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType != MJCToolBarFunMosaic){
         [assetView mouseMoved:theEvent];
         return;
     }
@@ -272,16 +269,15 @@
     NSPoint pt = theEvent.locationInWindow;
     
     MJCaptureAssetView* assetView = (MJCaptureAssetView*)[self superview];
-    MJCaptureView* captureView = (MJCaptureView*)[assetView superview];
-    if(captureView.funType_ != MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType != MJCToolBarFunMosaic){
         if(![self hasShapeFocus]){
         //如果是画箭头就先保存坐标再绘画
-        if(captureView.funType_ == MJCToolBarFunTriangleArrow){
+        if([SnipManager sharedInstance].funType == MJCToolBarFunTriangleArrow){
             _lastPoint_ = [self convertPoint:pt fromView:nil];
             drawView_.lastPoint = [self convertPoint:pt fromView:nil];
             [drawView_ setNeedsDisplay:YES];
         }
-        else if(captureView.funType_ == MJCToolBarFunBrush){
+        else if([SnipManager sharedInstance].funType == MJCToolBarFunBrush){
             [drawView_ addObject:NSStringFromPoint([self convertPoint:pt fromView:nil])];
             [drawView_ setNeedsDisplay:YES];
         }
@@ -305,13 +301,12 @@
 - (void)mouseEntered:(NSEvent *)theEvent
 {
     MJCaptureAssetView* assetView = (MJCaptureAssetView*)[self superview];
-    MJCaptureView* captureView = (MJCaptureView*)[assetView superview];
     //改变鼠标样式
-    if(captureView.funType_ == MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
         [self changeCursor];
     }
     //是否需要消息转发
-    if(captureView.funType_ != MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType != MJCToolBarFunMosaic){
         [assetView mouseEntered:theEvent];
         return;
     }
@@ -320,12 +315,11 @@
 - (void)mouseExited:(NSEvent *)theEvent
 {
     MJCaptureAssetView* assetView = (MJCaptureAssetView*)[self superview];
-    MJCaptureView* captureView = (MJCaptureView*)[assetView superview];
     //改变鼠标样式
     [[NSCursor arrowCursor] set];
     
     //是否需要消息转发
-    if(captureView.funType_ != MJCToolBarFunMosaic){
+    if([SnipManager sharedInstance].funType != MJCToolBarFunMosaic){
         [assetView mouseExited:theEvent];
         return;
     }

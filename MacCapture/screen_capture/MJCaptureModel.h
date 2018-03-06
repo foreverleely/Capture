@@ -18,9 +18,7 @@ typedef enum MJCToolBarFunType{
     MJCToolBarFunTriangleArrow,
     MJCToolBarFunBrush,
     MJCToolBarFunText,
-    ///add by aries{
     MJCToolBarFunMosaic
-    ///}
 }MJCToolBarFunType;
 
 @interface NSImage (MJCaptureImage)
