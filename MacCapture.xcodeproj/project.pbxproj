@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		029A1D20204E2CFB003A3B59 /* SnipUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A1D19204E2CFB003A3B59 /* SnipUtil.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		029A1D21204E2CFB003A3B59 /* SnipView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 029A1D1B204E2CFB003A3B59 /* SnipView.mm */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		029A1D22204E2CFB003A3B59 /* SnipWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A1D1D204E2CFB003A3B59 /* SnipWindow.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		029A1D23204E2CFB003A3B59 /* SnipWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A1D1F204E2CFB003A3B59 /* SnipWindowController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		029A1D26204E2E88003A3B59 /* NSColor+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A1D25204E2E88003A3B59 /* NSColor+Helper.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		029A1D29204E2F25003A3B59 /* SnipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A1D28204E2F25003A3B59 /* SnipManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		B2FD1ECA1B80D81D00C86D15 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2FD1EC91B80D81D00C86D15 /* Cocoa.framework */; };
 		B2FD1ED41B80D81D00C86D15 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FD1ED21B80D81D00C86D15 /* InfoPlist.strings */; };
 		B2FD1ED61B80D81D00C86D15 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B2FD1ED51B80D81D00C86D15 /* main.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -100,6 +106,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		029A1D18204E2CFB003A3B59 /* SnipUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnipUtil.h; sourceTree = "<group>"; };
+		029A1D19204E2CFB003A3B59 /* SnipUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnipUtil.m; sourceTree = "<group>"; };
+		029A1D1A204E2CFB003A3B59 /* SnipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnipView.h; sourceTree = "<group>"; };
+		029A1D1B204E2CFB003A3B59 /* SnipView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SnipView.mm; sourceTree = "<group>"; };
+		029A1D1C204E2CFB003A3B59 /* SnipWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnipWindow.h; sourceTree = "<group>"; };
+		029A1D1D204E2CFB003A3B59 /* SnipWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnipWindow.m; sourceTree = "<group>"; };
+		029A1D1E204E2CFB003A3B59 /* SnipWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnipWindowController.h; sourceTree = "<group>"; };
+		029A1D1F204E2CFB003A3B59 /* SnipWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnipWindowController.m; sourceTree = "<group>"; };
+		029A1D24204E2E88003A3B59 /* NSColor+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+Helper.h"; sourceTree = "<group>"; };
+		029A1D25204E2E88003A3B59 /* NSColor+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+Helper.m"; sourceTree = "<group>"; };
+		029A1D27204E2F25003A3B59 /* SnipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnipManager.h; sourceTree = "<group>"; };
+		029A1D28204E2F25003A3B59 /* SnipManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnipManager.m; sourceTree = "<group>"; };
+		029A1D2A204E309E003A3B59 /* MouseEventProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MouseEventProtocol.h; sourceTree = "<group>"; };
 		B2FD1EC61B80D81D00C86D15 /* MacCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2FD1EC91B80D81D00C86D15 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B2FD1ECC1B80D81D00C86D15 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -231,6 +250,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		029A1D17204E2C00003A3B59 /* Snip */ = {
+			isa = PBXGroup;
+			children = (
+				029A1D27204E2F25003A3B59 /* SnipManager.h */,
+				029A1D28204E2F25003A3B59 /* SnipManager.m */,
+				029A1D18204E2CFB003A3B59 /* SnipUtil.h */,
+				029A1D19204E2CFB003A3B59 /* SnipUtil.m */,
+				029A1D1A204E2CFB003A3B59 /* SnipView.h */,
+				029A1D1B204E2CFB003A3B59 /* SnipView.mm */,
+				029A1D1C204E2CFB003A3B59 /* SnipWindow.h */,
+				029A1D1D204E2CFB003A3B59 /* SnipWindow.m */,
+				029A1D1E204E2CFB003A3B59 /* SnipWindowController.h */,
+				029A1D1F204E2CFB003A3B59 /* SnipWindowController.m */,
+				029A1D24204E2E88003A3B59 /* NSColor+Helper.h */,
+				029A1D25204E2E88003A3B59 /* NSColor+Helper.m */,
+				029A1D2A204E309E003A3B59 /* MouseEventProtocol.h */,
+			);
+			name = Snip;
+			sourceTree = "<group>";
+		};
 		B2FD1EBD1B80D81D00C86D15 = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +324,7 @@
 				EC4F51621B82DA06002A7851 /* image */,
 				B2FD1EDB1B80D81D00C86D15 /* AppDelegate.h */,
 				B2FD1EDC1B80D81D00C86D15 /* AppDelegate.mm */,
+				029A1D17204E2C00003A3B59 /* Snip */,
 				B2FD1EDE1B80D81D00C86D15 /* MainMenu.xib */,
 				B2FD1EE11B80D81D00C86D15 /* Images.xcassets */,
 				B2FD1ED01B80D81D00C86D15 /* Supporting Files */,
@@ -569,15 +609,21 @@
 				B2FD1EDD1B80D81D00C86D15 /* AppDelegate.mm in Sources */,
 				EC5B77191BB84E2400CC045E /* MJCaptureSlideView.mm in Sources */,
 				ECE8C13F1D9A9597008DF82B /* CustomSlider.m in Sources */,
+				029A1D29204E2F25003A3B59 /* SnipManager.m in Sources */,
+				029A1D22204E2CFB003A3B59 /* SnipWindow.m in Sources */,
+				029A1D26204E2E88003A3B59 /* NSColor+Helper.m in Sources */,
+				029A1D20204E2CFB003A3B59 /* SnipUtil.m in Sources */,
 				EC4FB0461BBAC103001FF9B1 /* MJCaptureInfoView.mm in Sources */,
 				EC5B77171BB84E2400CC045E /* MJCaptureModel.mm in Sources */,
 				B2FD1ED61B80D81D00C86D15 /* main.m in Sources */,
 				EC4FB03B1BBA61E5001FF9B1 /* DropDownButton.mm in Sources */,
 				EC4E84C61B8C7D9500E1A2D8 /* DDHotKeyUtilities.m in Sources */,
 				ECE8C1401D9A9597008DF82B /* MJMosaicUtil.m in Sources */,
+				029A1D21204E2CFB003A3B59 /* SnipView.mm in Sources */,
 				EC5C5BF61DB47E7000F4B94E /* MJPersistentUtil.m in Sources */,
 				EC5B771A1BB84E2400CC045E /* MJCaptureToolBarView.mm in Sources */,
 				ECE8C1411D9A9597008DF82B /* MJMosaicView.mm in Sources */,
+				029A1D23204E2CFB003A3B59 /* SnipWindowController.m in Sources */,
 				EC5B771B1BB84E2400CC045E /* MJCaptureView.mm in Sources */,
 				EC4E84C51B8C7D9500E1A2D8 /* DDHotKeyCenter.m in Sources */,
 				EC5B77181BB84E2400CC045E /* MJCaptureSelectRangeView.mm in Sources */,

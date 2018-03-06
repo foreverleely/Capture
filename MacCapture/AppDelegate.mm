@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "SnipManager.h"
 #import <string>
 
 extern NSString *kAppNameKey;
@@ -199,12 +199,20 @@ void GetContent(std::string *out_response_string){
     [[captureWindow_ captureView] mouseMoved:[NSApp currentEvent]];
 }
 - (IBAction) beginCapture:(id)sender{
+  BOOL isIn115 = false;
+  
+  if (isIn115) {
     if (!isInitFromBrowser_) {
-        isInitFromBrowser_ = YES;
-        sleep(0.01);
-        [self sendInitSettingInfoTo115Browser:[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"isOnlyInit", nil]];
-        return;
+      isInitFromBrowser_ = YES;
+      sleep(0.01);
+      [self sendInitSettingInfoTo115Browser:[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"isOnlyInit", nil]];
+      return;
     }
+  }
+  
+  [[SnipManager sharedInstance] startCapture];
+  return;
+  
     [[NSPasteboard generalPasteboard] clearContents];
     if (!captureWindow_) {
         //[NSApp activateIgnoringOtherApps:YES];
@@ -217,10 +225,9 @@ void GetContent(std::string *out_response_string){
         captureWindow_ = [[MJCaptureWindow alloc] initWithContentRect:rect styleMask:NSBorderlessWindowMask backing:NSBackingStoreRetained defer:YES];
         [captureWindow_ disableFlushWindow];
         captureWindow_.styleMask = NSPopUpMenuWindowLevel;
-        //[_window addChildWindow:captureWindow_ ordered:NSWindowAbove];
-        //[captureWindow_ makeKeyAndOrderFront:nil];
+      
     }
-    [self performSelector:@selector(SetMouseEnventForFirst) withObject:nil afterDelay:0.26];
+    //[self performSelector:@selector(SetMouseEnventForFirst) withObject:nil afterDelay:0.26];
 }
 
 
