@@ -57,6 +57,8 @@ extern const int kKEY_ESC_CODE;
 
 - (void)endCapture:(NSImage *)image;
 
+- (void)endCaptureimage;
+
 - (void)startCapture;
 
 - (void)configExportPath:(NSString *)path;

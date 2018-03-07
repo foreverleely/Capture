@@ -186,8 +186,7 @@ void GetContent(std::string *out_response_string){
 
 }
 - (void) closeCaptureWindow{
-    //[captureWindow_ release];
-    captureWindow_ = nil;
+  [[SnipManager sharedInstance] endCaptureimage];
 }
 //add by liuchipeng2016.1.6{
 -(void)showKeyWindow{

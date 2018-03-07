@@ -107,6 +107,9 @@ const int kDRAG_POINT_LEN = 5;
         NSRect imageRect = NSIntersectionRect(self.drawingRect, self.bounds);
         [self.image drawInRect:imageRect fromRect:imageRect operation:NSCompositeSourceOver fraction:1.0];
         [[NSColor colorFromInt:kBORDER_LINE_COLOR] set];
+      if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_DONE) {
+        [[NSColor clearColor] set];
+      }
         NSBezierPath *rectPath = [NSBezierPath bezierPath];
         [rectPath setLineWidth:kBORDER_LINE_WIDTH];
         [rectPath removeAllPoints];
@@ -122,10 +125,16 @@ const int kDRAG_POINT_LEN = 5;
                 [adjustPath fill];
             }
         }
-      //
+      
       [self reSetLeftTopInfoView];
       //设置工具栏
       [self reSetToolbarView];
+      
+      if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_DONE) {
+        //保存图片前先去掉框跟线
+        NSBezierPath *rectPath = [NSBezierPath bezierPath];
+        [rectPath removeAllPoints];
+      }
       
     }
     // Drawing code here.
@@ -180,49 +189,44 @@ const int kDRAG_POINT_LEN = 5;
   int scaleHeight = [_zoomInfoView GetImageViewHeight]/4.0;
   
   //return;
-  
-   //线程
-   dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
-   // 异步执行任务创建方法
-   dispatch_async(queue, ^{
-     NSRect zoomImageViewRect = NSMakeRect(event.locationInWindow.x-scaleWidth/2.0, srect.size.height-(event.locationInWindow.y)-scaleHeight/2.0, scaleWidth, scaleHeight);
-     CGImageRef screenImageRef = createCGImageRefFromNSImage(_image);
-     CGFloat ratio = [[NSScreen mainScreen] backingScaleFactor];
-     zoomImageViewRect.origin.x *= ratio;
-     zoomImageViewRect.origin.y *= ratio;
-     zoomImageViewRect.size.width *= ratio;
-     zoomImageViewRect.size.height *= ratio;
-   // 这里放异步执行任务代码
-     CGImageRef imageRef = CGImageCreateWithImageInRect(screenImageRef, zoomImageViewRect);
-     CGImageRelease(screenImageRef);
-     NSImage *zoomImage = createNSImageFromCGImageRef(imageRef);
-     CGImageRelease(imageRef);
-     
-     
-     dispatch_sync(dispatch_get_main_queue(), ^{
-       // 主线程更新UI
-       [_zoomInfoView SetZoomImage:zoomImage];
-       [_zoomInfoView SetCurrentPoint:event.locationInWindow];
-       [zoomImage lockFocus];
-       NSColor *pixelColor = NSReadPixel(NSMakePoint(zoomImage.size.width/2.0, zoomImage.size.height/2.0));
-       NSColor *color = [pixelColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-       [_zoomInfoView SetCurrentColor:color];
-       [zoomImage unlockFocus];
-       NSPoint zoomPt = NSMakePoint(event.locationInWindow.x+20, event.locationInWindow.y-_zoomInfoView.frame.size.height);
-       NSRect zoomRect = _zoomInfoView.frame;
-       zoomRect.origin = zoomPt;
-       if (NSMaxX(zoomRect) > srect.size.width) {
-         zoomPt.x = event.locationInWindow.x-20-_zoomInfoView.frame.size.width;
-         zoomRect.origin = zoomPt;
-       }
-       if (NSMinY(zoomRect) < 30) {
-         zoomPt.y = event.locationInWindow.y;
-         zoomRect.origin = zoomPt;
-       }
-       [_zoomInfoView setFrame:zoomRect];
-     });
-   
-   });
+  dispatch_async(dispatch_get_global_queue(0, 0), ^{
+    // 追加任务1
+    NSRect zoomImageViewRect = NSMakeRect(event.locationInWindow.x-scaleWidth/2.0, srect.size.height-(event.locationInWindow.y)-scaleHeight/2.0, scaleWidth, scaleHeight);
+    CGImageRef screenImageRef = createCGImageRefFromNSImage(_image);
+    CGFloat ratio = [[NSScreen mainScreen] backingScaleFactor];
+    zoomImageViewRect.origin.x *= ratio;
+    zoomImageViewRect.origin.y *= ratio;
+    zoomImageViewRect.size.width *= ratio;
+    zoomImageViewRect.size.height *= ratio;
+    // 这里放异步执行任务代码
+    CGImageRef imageRef = CGImageCreateWithImageInRect(screenImageRef, zoomImageViewRect);
+    CGImageRelease(screenImageRef);
+    NSImage *zoomImage = createNSImageFromCGImageRef(imageRef);
+    CGImageRelease(imageRef);
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+      // 主线程更新UI
+      [_zoomInfoView SetZoomImage:zoomImage];
+      [_zoomInfoView SetCurrentPoint:event.locationInWindow];
+      [zoomImage lockFocus];
+      NSColor *pixelColor = NSReadPixel(NSMakePoint(zoomImage.size.width/2.0, zoomImage.size.height/2.0));
+      NSColor *color = [pixelColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+      [_zoomInfoView SetCurrentColor:color];
+      [zoomImage unlockFocus];
+      NSPoint zoomPt = NSMakePoint(event.locationInWindow.x+20, event.locationInWindow.y-_zoomInfoView.frame.size.height);
+      NSRect zoomRect = _zoomInfoView.frame;
+      zoomRect.origin = zoomPt;
+      if (NSMaxX(zoomRect) > srect.size.width) {
+        zoomPt.x = event.locationInWindow.x-20-_zoomInfoView.frame.size.width;
+        zoomRect.origin = zoomPt;
+      }
+      if (NSMinY(zoomRect) < 30) {
+        zoomPt.y = event.locationInWindow.y;
+        zoomRect.origin = zoomPt;
+      }
+      [_zoomInfoView setFrame:zoomRect];
+    });
+  });
   
 }
 
@@ -411,6 +415,8 @@ const int kDRAG_POINT_LEN = 5;
 
 - (void)CreatSaveImage:(BOOL)isSave{
   //add by liuchipeng 2016.1.7{
+  [SnipManager sharedInstance].captureState = CAPTURE_STATE_DONE;
+  
   [self hideSlideShapeView];
   [_pointInfoView setHidden:YES];
   //}
@@ -421,8 +427,9 @@ const int kDRAG_POINT_LEN = 5;
   [_assetView resetSlideFocusNone];
   [[self window] makeFirstResponder:self];
   
-  _drawingRect = NSInsetRect(_drawingRect, 4, 4);
+  //_drawingRect = NSInsetRect(_drawingRect, 4, 4);
   _drawingRect = NSIntegralRect(_drawingRect);
+  
   if ([[[self superview] superview] isKindOfClass:[NSScrollView class]]) {
     [[[self superview] superview] setHidden:YES];
   }
@@ -442,7 +449,6 @@ const int kDRAG_POINT_LEN = 5;
       NSImage *tempImage = [self resizeImage:image size:NSMakeSize(_drawingRect.size.width, _drawingRect.size.height)];
       image = tempImage;
       rep = [image bitmapImageRepresentation];
-      //[image setSize:NSMakeSize(selectRect.size.width, selectRect.size.height)];
     }
   }
   
@@ -462,7 +468,7 @@ const int kDRAG_POINT_LEN = 5;
   [app_delegate sendMessageTo115Browser:image];
   
   [_pointInfoView setHidden:NO];
-  [SnipManager sharedInstance] endCapture:<#(NSImage *)#>
+  [[SnipManager sharedInstance] endCaptureimage];
   [self setNeedsDisplay:YES];
 }
 
@@ -485,11 +491,91 @@ const int kDRAG_POINT_LEN = 5;
   
   return targetImage;
 }
-/*未加
+
+///
 - (void)keyDown:(NSEvent *)theEvent{
+  
   //add by liuchipeng 2016.1.6{按下方向键移动选择框
-*/
+  if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_EDIT) {
+    if(theEvent.keyCode==124){
+      NSRect newRect = _drawingRect;
+      newRect.origin.x += 1;
+      _drawingRect.origin.x += 1;
+      NSRect newToolBarRect = _toolbarView.frame;
+      newToolBarRect.origin.x +=1;
+      [_toolbarView setFrame:newToolBarRect];
+      _drawingRect = newRect;
+      NSRect newInfoRect = _pointInfoView.frame;
+      newInfoRect.origin.x += 1;
+      [_pointInfoView setFrame:newInfoRect];
+      [self setNeedsDisplay:YES];
+    }
+    if(theEvent.keyCode==123){
+      NSRect newRect = _drawingRect;
+      newRect.origin.x-=1;
+      _drawingRect.origin.x-=1;
+      _drawingRect= newRect;
+      NSRect newToolBarRect = _toolbarView.frame;
+      newToolBarRect.origin.x -=1;
+      [_toolbarView setFrame:newToolBarRect];
+      NSRect newInfoRect = _pointInfoView.frame;
+      newInfoRect.origin.x -= 1;
+      [_pointInfoView setFrame:newInfoRect];
+      [self setNeedsDisplay:YES];
+    }
+    if(theEvent.keyCode==125){
+      NSRect newRect = _drawingRect;
+      newRect.origin.y-=1;
+      _drawingRect.origin.y-=1;
+      _drawingRect = newRect;
+      NSRect newToolBarRect = _toolbarView.frame;
+      newToolBarRect.origin.y -=1;
+      [_toolbarView setFrame:newToolBarRect];
+      NSRect newInfoRect = _pointInfoView.frame;
+      newInfoRect.origin.y -= 1;
+      [_pointInfoView setFrame:newInfoRect];
+      [self setNeedsDisplay:YES];
+    }
+    if(theEvent.keyCode==126){
+      NSRect newRect = _drawingRect;
+      newRect.origin.y+=1;
+      _drawingRect.origin.y+=1;
+      _drawingRect = newRect;
+      NSRect newToolBarRect = _toolbarView.frame;
+      newToolBarRect.origin.y +=1;
+      [_toolbarView setFrame:newToolBarRect];
+      NSRect newInfoRect = _pointInfoView.frame;
+      newInfoRect.origin.y += 1;
+      [_pointInfoView setFrame:newInfoRect];
+      [self setNeedsDisplay:YES];
+    }
+  }else{
+    
+  }
+  //}
+  
+  //command + s 保存截图
+  if (theEvent.modifierFlags == 0x100108 && theEvent.keyCode == 1 && [SnipManager sharedInstance].captureState != CAPTURE_STATE_HILIGHT) {
+    [self CreatSaveImage:YES];
+    [[SnipManager sharedInstance] endCaptureimage];
+  }
+  
+  
+  if (theEvent.keyCode == 53) {//esc
+    [[SnipManager sharedInstance] endCaptureimage];
+  }
+  if (theEvent.keyCode == 36) {//enter
+    [self CreatSaveImage:NO];
+    [[SnipManager sharedInstance] endCaptureimage];
+  }
+  //add by liuchipeng 2016.1.4{
+  
+  
+  //}
+  
+}
 
-//Mouse Even
-
+- (void)rightMouseDown:(NSEvent *)event {
+  [[SnipManager sharedInstance] endCaptureimage];
+}
 @end

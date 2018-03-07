@@ -110,6 +110,17 @@ const int kKEY_ESC_CODE = 53;
   
 }
 
+- (void)endCaptureimage
+{
+  
+  for (SnipWindowController *windowController in self.windowControllerArray) {
+    [windowController.window orderOut:nil];
+    
+  }
+  [self clearController];
+  
+}
+
 - (void)configExportPath:(NSString *)path {
     exportPath = path;
 }

@@ -242,7 +242,9 @@ const int kAdjustKnown = 8;
   //双击
     if ([event clickCount] == 2) {
         if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_HILIGHT) {
-            [self onOK];
+          [self.snipView CreatSaveImage:YES];
+          return;
+          [self onOK];
         }
     }
   //单击 选中截屏窗口
@@ -446,23 +448,6 @@ const int kAdjustKnown = 8;
     }
 }
 
-- (NSImage *)getCaptureImage {
-    [self.originImage lockFocus];
-    NSRect rect = NSIntersectionRect(self.captureWindowRect, self.window.frame);
-    //[self.snipView.pathView drawFinishCommentInRect:[self.window convertRectFromScreen:rect]];
-    //先设置 下面一个实例
-    NSBitmapImageRep *bits = [[NSBitmapImageRep alloc] initWithFocusedViewRect:[self.window convertRectFromScreen:rect]];
-    
-    [self.originImage unlockFocus];
-    
-    //再设置后面要用到得 props属性
-    NSDictionary *imageProps = @{NSImageCompressionFactor : @(1.0)};
-    
-    //之后 转化为NSData 以便存到文件中
-    NSData *imageData = [bits representationUsingType:NSJPEGFileType properties:imageProps];
-    
-    return [[NSImage alloc] initWithData:imageData];
-}
 
 - (void)saveImage:(NSImage *)image atPath:(NSString *)path {
     
@@ -473,6 +458,24 @@ const int kAdjustKnown = 8;
     [newRep setSize:[image size]];   // if you want the same resolution
     NSData *pngData = [newRep representationUsingType:NSPNGFileType properties:nil];
     [pngData writeToFile:path atomically:YES];
+}
+
+- (NSImage *)getCaptureImage {
+  [self.originImage lockFocus];
+  NSRect rect = NSIntersectionRect(self.captureWindowRect, self.window.frame);
+  //[self.snipView.pathView drawFinishCommentInRect:[self.window convertRectFromScreen:rect]];
+  //先设置 下面一个实例
+  NSBitmapImageRep *bits = [[NSBitmapImageRep alloc] initWithFocusedViewRect:[self.window convertRectFromScreen:rect]];
+  
+  [self.originImage unlockFocus];
+  
+  //再设置后面要用到得 props属性
+  NSDictionary *imageProps = @{NSImageCompressionFactor : @(1.0)};
+  
+  //之后 转化为NSData 以便存到文件中
+  NSData *imageData = [bits representationUsingType:NSJPEGFileType properties:imageProps];
+  
+  return [[NSImage alloc] initWithData:imageData];
 }
 
 @end

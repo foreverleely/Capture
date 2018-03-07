@@ -7,9 +7,9 @@
 //
 
 #import "MJCaptureToolBarView.h"
-#import "MJCaptureView.h"
 #import "MJPersistentUtil.h"
 #import "SnipManager.h"
+#import "SnipView.h"
 
 @implementation MJCaptureToolBarView
 
@@ -227,7 +227,7 @@
     int changeValue = 0;
     if(newValue < 2){
         changeValue = 6;
-        [((MJCaptureView*)[self superview]) changeMosaic:changeValue];
+        [((SnipView*)[self superview]) changeMosaic:changeValue];
         [[MJPersistentUtil getInstance] setSliderValueForType:type sliderValue:0];
     }
     else if(newValue > 95){
@@ -235,12 +235,12 @@
             return;
         //changeValue = 30;
         changeValue = 95;
-        [((MJCaptureView*)[self superview]) changeMosaic:changeValue];
+        [((SnipView*)[self superview]) changeMosaic:changeValue];
         //[MJPersistentUtil setSliderValue:100];
         [[MJPersistentUtil getInstance] setSliderValueForType:type sliderValue:100];
     }else{
         changeValue = newValue;
-        [((MJCaptureView*)[self superview]) changeMosaic:changeValue];
+        [((SnipView*)[self superview]) changeMosaic:changeValue];
         //[MJPersistentUtil setSliderValue:changeValue];
         [[MJPersistentUtil getInstance] setSliderValueForType:type sliderValue:changeValue];
     }
@@ -262,7 +262,7 @@
         int fontSize = [str intValue];
         
         [SnipManager sharedInstance].nFontSize = fontSize;
-        [((MJCaptureView*)[self superview]) upSelectSlideViewFontSize];
+        [((SnipView*)[self superview]) upSelectSlideViewFontSize];
         NSLog(@"selectMenuIndex: %@,   %d", sender, fontSize);
         
         ///add by aries{
@@ -358,14 +358,14 @@
         /*
         NSRect sreenRect = [[NSScreen mainScreen] frame];
         if (!NSContainsRect(sreenRect, self.frame)) {
-            [((MJCaptureView*)[self superview]) ReCalculateViewFrameChangeSize:NO event:[NSApp currentEvent]];
+            [((SnipView*)[self superview]) ReCalculateViewFrameChangeSize:NO event:[NSApp currentEvent]];
         }*/
         [self setNeedsDisplay:YES];
     }
     isShowSubFunction_ = YES;
     
     //if (![SnipManager sharedInstance].isEdit_) {
-        [((MJCaptureView*)[self superview]) BeginEdit];
+        [((SnipView*)[self superview]) BeginEdit];
     //}
 }
 - (void)btnAction1:(id)sender{
@@ -542,7 +542,7 @@
             [btnUndo_ setNeedsDisplay:YES];
             NSLog(@"btnUndo_ 1");
         }else{
-            [((MJCaptureView*)[self superview]) CleanOpationAndReStart];
+            [((SnipView*)[self superview]) CleanOpationAndReStart];
             [self resetToolbarBtnStatus];
             NSLog(@"btnUndo_ 2");
         }
@@ -575,7 +575,7 @@
         //add by aries
         [[MJPersistentUtil getInstance] setLineWidthForType:[SnipManager sharedInstance].funType lineWidth:3];
         if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
-            [((MJCaptureView*)[self superview]) BeginEdit];
+            [((SnipView*)[self superview]) BeginEdit];
         }
         ///}
     }else if ([btnLineWidthMid_ isEqual:sender]) {
@@ -590,7 +590,7 @@
         //add by aries
         [[MJPersistentUtil getInstance] setLineWidthForType:[SnipManager sharedInstance].funType lineWidth:6];
         if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
-            [((MJCaptureView*)[self superview]) BeginEdit];
+            [((SnipView*)[self superview]) BeginEdit];
         }
         ///}
     }else if ([btnLineWidthBig_ isEqual:sender]) {
@@ -605,7 +605,7 @@
         //add by aries
         [[MJPersistentUtil getInstance] setLineWidthForType:[SnipManager sharedInstance].funType lineWidth:12];
         if([SnipManager sharedInstance].funType == MJCToolBarFunMosaic){
-            [((MJCaptureView*)[self superview]) BeginEdit];
+            [((SnipView*)[self superview]) BeginEdit];
         }
         
         ///}
@@ -641,7 +641,7 @@
         //int sliderValue = [mosaicSlider_ intValue];
         //int sliderValue = 50;
         //改变模糊度
-        //[((MJCaptureView*)[self superview]) changeMosaic:sliderValue];
+        //[((SnipView*)[self superview]) changeMosaic:sliderValue];
     }
     ///}
     [self setNeedsDisplay:YES];
@@ -649,7 +649,7 @@
 
 //如果不是save，则放到剪切板中
 - (void)CreatSaveImage:(BOOL)isSave{
-    [((MJCaptureView*)[self superview]) CreatSaveImage:isSave];
+    [((SnipView*)[self superview]) CreatSaveImage:isSave];
 }
 
 - (void)btnColorAction:(id)sender{
@@ -657,7 +657,7 @@
         btnSelectColor_.bgNormalColor = ((MJCaptureColorButton*)sender).bgNormalColor;
         
         [SnipManager sharedInstance].brushColor = btnSelectColor_.bgNormalColor;
-        //[((MJCaptureView*)[self superview]) upSelectSlideViewColor];
+        //[((SnipView*)[self superview]) upSelectSlideViewColor];
         
         [btnSelectColor_ setNeedsDisplay:YES];
       
@@ -681,7 +681,7 @@
         oldRect.origin.x = oldRect.origin.x + (pt.x-firstMouseDonwPoint_.x);
         oldRect.origin.y = oldRect.origin.y + (pt.y-firstMouseDonwPoint_.y);
         
-        NSRect screenRect = [[NSScreen mainScreen] frame];
+        NSRect screenRect = ((SnipView*)self.superview).screen.frame;
         if (oldRect.origin.x < 0) {
             oldRect.origin.x = 0;
         }

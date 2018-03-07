@@ -15,21 +15,21 @@
 @class MJMosaicView;
 
 @interface SnipView : NSView
-@property NSImage *image;
+@property (strong)NSImage *image;
 @property NSRect drawingRect;
 
 @property(nonatomic, strong) NSTrackingArea *trackingArea;
-@property NSScreen *screen;
+@property (strong)NSScreen *screen;
 ///add new
 @property int nLineWidth;
 @property MJCToolBarFunType funType;
-@property NSColor* brushColor;
+@property (strong)NSColor* brushColor;
 @property int nFontSize;
 
-@property MJSlideShapeView *slideShapeView;
-@property MJCaptureAssetView   *assetView;
-@property MJCaptureToolBarView *toolbarView;
-@property MJMosaicView* mosaicView_;
+@property (strong)MJSlideShapeView *slideShapeView;
+@property (strong)MJCaptureAssetView   *assetView;
+@property (strong)MJCaptureToolBarView *toolbarView;
+@property (strong)MJMosaicView* mosaicView_;
 
 @property BOOL isAfterClean;
 
@@ -62,4 +62,6 @@
 - (void)setzoomInfoView:(BOOL)isHidde;
 
 - (void)setpointInfoView:(BOOL)isHidde;
+
+- (void)CreatSaveImage:(BOOL)isSave;
 @end
