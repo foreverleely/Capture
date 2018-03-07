@@ -100,8 +100,7 @@ const int kKEY_ESC_CODE = 53;
 - (void)endCapture:(NSImage *)image
 {
   
-    if (!self.isWorking) return;
-    self.isWorking = NO;
+    
     for (SnipWindowController *windowController in self.windowControllerArray) {
         [windowController.window orderOut:nil];
       

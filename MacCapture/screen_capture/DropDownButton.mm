@@ -9,6 +9,7 @@
 #import "DropDownButton.h"
 #import "MJCaptureModel.h"
 #import "MJCaptureView.h"
+#import "SnipManager.h"
 
 @implementation DropDownButton
 @synthesize stritemname;
@@ -91,10 +92,10 @@
     CGContextSetTextDrawingMode(context, kCGTextFill);
     CGContextSelectFont(context, "Arial", 13, kCGEncodingMacRoman);
     if (!stritemname) {
-        stritemname = [NSString stringWithFormat:@"%d", ((MJCaptureView*)[[self superview] superview]).nFontSize_];
+        stritemname = [NSString stringWithFormat:@"%d", [SnipManager sharedInstance].nFontSize];
     }
     if ([stritemname length] == 0 || [stritemname isEqualToString:@"pt"]) {
-        stritemname = [NSString stringWithFormat:@"%d", ((MJCaptureView*)[[self superview] superview]).nFontSize_];
+        stritemname = [NSString stringWithFormat:@"%d", [SnipManager sharedInstance].nFontSize];
     }
     CGContextShowTextAtPoint(context, 8, 7, [[stritemname stringByAppendingString:@"pt"] UTF8String] , strlen([[stritemname stringByAppendingString:@"pt"] UTF8String]));
     
@@ -194,14 +195,14 @@
     stritemname = [popUpCell titleOfSelectedItem];
     if ([stritemname length] == 0) {
         return;
-        stritemname = [NSString stringWithFormat:@"%d", ((MJCaptureView*)[[self superview] superview]).nFontSize_];
+        stritemname = [NSString stringWithFormat:@"%d", [SnipManager sharedInstance].nFontSize];
     }else{
-        ((MJCaptureView*)[[self superview] superview]).nFontSize_ = [[popUpCell titleOfSelectedItem] intValue];
+        [SnipManager sharedInstance].nFontSize = [[popUpCell titleOfSelectedItem] intValue];
     }
     if ([stritemname isEqualToString:@"pt"]) {
-        stritemname = [NSString stringWithFormat:@"%d", ((MJCaptureView*)[[self superview] superview]).nFontSize_];
+        stritemname = [NSString stringWithFormat:@"%d", [SnipManager sharedInstance].nFontSize];
     }else{
-        ((MJCaptureView*)[[self superview] superview]).nFontSize_ = [[popUpCell titleOfSelectedItem] intValue];
+        [SnipManager sharedInstance].nFontSize = [[popUpCell titleOfSelectedItem] intValue];
     }
     [self setTitle:[stritemname stringByAppendingString:@"pt"]];
     

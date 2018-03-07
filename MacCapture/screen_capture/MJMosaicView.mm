@@ -364,11 +364,11 @@
     MJCaptureAssetView* assetView = (MJCaptureAssetView*)[self superview];
     MJCaptureView* captureView = (MJCaptureView*)[assetView superview];
     NSCursor* cursor = nil;
-    if(captureView.nLineWidth_ == 3){
+    if([SnipManager sharedInstance].nLineWidth == 3){
         cursor = [[[NSCursor alloc] initWithImage:[NSImage imageNamed:@"mj_capture_mosaic_brush_small"] hotSpot:NSMakePoint(4, 4)] autorelease];
-    }else if(captureView.nLineWidth_ == 6){
+    }else if([SnipManager sharedInstance].nLineWidth == 6){
         cursor = [[[NSCursor alloc] initWithImage:[NSImage imageNamed:@"mj_capture_mosaic_brush_mid"] hotSpot:NSMakePoint(8, 8)] autorelease];
-    }else if(captureView.nLineWidth_ == 12){
+    }else if([SnipManager sharedInstance].nLineWidth == 12){
         cursor = [[[NSCursor alloc] initWithImage:[NSImage imageNamed:@"mj_capture_mosaic_brush_big"] hotSpot:NSMakePoint(16, 16)] autorelease];
     }
     [cursor set];

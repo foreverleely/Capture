@@ -58,4 +58,8 @@
 - (void)BeginEdit;
 
 - (void)changeMosaic:(int)sliderValue;
+
+- (void)setzoomInfoView:(BOOL)isHidde;
+
+- (void)setpointInfoView:(BOOL)isHidde;
 @end

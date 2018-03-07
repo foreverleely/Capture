@@ -288,8 +288,6 @@ const int kAdjustKnown = 8;
     }
     if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_EDIT) {
       //如果不在编辑状态
-        //[self.snipView showToolkit];
-        //[self.snipView hideTip];
         [self.snipView setNeedsDisplay:YES];
     }
     else {
@@ -313,7 +311,7 @@ const int kAdjustKnown = 8;
         self.endPoint = [NSEvent mouseLocation];
       //显示放大的视图 左上角视图 显示视图跟
       [self.snipView setZoomAndPointViewHide:NO];
-      //[self.snipView ReSetZoomInfoView:theEvent];
+      [self.snipView ReSetZoomInfoView:theEvent];
       
       self.captureWindowRect = NSUnionRect(NSMakeRect(self.startPoint.x, self.startPoint.y, 1, 1), NSMakeRect(self.endPoint.x, self.endPoint.y, 1, 1));
       self.captureWindowRect = NSIntersectionRect(self.captureWindowRect, self.window.frame);
@@ -330,7 +328,7 @@ const int kAdjustKnown = 8;
   //移动整个截图区域
     else if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_ADJUST) {
       //显示
-      [self.snipView setZoomAndPointViewHide:NO];
+      [self.snipView setpointInfoView:NO];
       
       if (self.dragDirection == -1) return;
         NSPoint mouseLocation = [NSEvent mouseLocation];

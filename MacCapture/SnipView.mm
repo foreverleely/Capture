@@ -164,60 +164,66 @@ const int kDRAG_POINT_LEN = 5;
   [_pointInfoView setHidden:isHidde];
 }
 
+- (void)setzoomInfoView:(BOOL)isHidde {
+    [_zoomInfoView setHidden:isHidde];
+}
+
+- (void)setpointInfoView:(BOOL)isHidde {
+  [_pointInfoView setHidden:isHidde];
+}
+
 - (void)ReSetZoomInfoView:(NSEvent*)event{
-  /*
-   //线程
-   dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-   // 异步执行任务创建方法
-   dispatch_async(queue, ^{
-   // 这里放异步执行任务代码
-   
-   
-   });
-   */
+  
   
   NSRect srect = [_screen frame];
   int scaleWidth = [_zoomInfoView GetImageViewWidth]/4.0;
   int scaleHeight = [_zoomInfoView GetImageViewHeight]/4.0;
   
-  NSRect zoomImageViewRect = NSMakeRect(event.locationInWindow.x-scaleWidth/2.0, srect.size.height-(event.locationInWindow.y)-scaleHeight/2.0, scaleWidth, scaleHeight);
-
-  CGImageRef screenImageRef = createCGImageRefFromNSImage(_image);
-  CGFloat ratio = [[NSScreen mainScreen] backingScaleFactor];
-  zoomImageViewRect.origin.x *= ratio;
-  zoomImageViewRect.origin.y *= ratio;
-  zoomImageViewRect.size.width *= ratio;
-  zoomImageViewRect.size.height *= ratio;
-  CGImageRef imageRef = CGImageCreateWithImageInRect(screenImageRef, zoomImageViewRect);
-  CGImageRelease(screenImageRef);
-  NSImage *zoomImage = createNSImageFromCGImageRef(imageRef);
-  CGImageRelease(imageRef);
-  [_zoomInfoView SetZoomImage:zoomImage];
-  [_zoomInfoView SetCurrentPoint:event.locationInWindow];
-  [zoomImage lockFocus];
-  NSColor *pixelColor = NSReadPixel(NSMakePoint(zoomImage.size.width/2.0, zoomImage.size.height/2.0));
-  NSColor *color = [pixelColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-  [_zoomInfoView SetCurrentColor:color];
-  [zoomImage unlockFocus];
+  //return;
   
-  NSPoint zoomPt = NSMakePoint(event.locationInWindow.x+20, event.locationInWindow.y-_zoomInfoView.frame.size.height);
-  NSRect zoomRect = _zoomInfoView.frame;
-  zoomRect.origin = zoomPt;
-  if (NSMaxX(zoomRect) > srect.size.width) {
-    zoomPt.x = event.locationInWindow.x-20-_zoomInfoView.frame.size.width;
-    zoomRect.origin = zoomPt;
-  }
-  if (NSMinY(zoomRect) < 30) {
-    zoomPt.y = event.locationInWindow.y;
-    zoomRect.origin = zoomPt;
-  }
-  [_zoomInfoView setFrame:zoomRect];
-  /*
-  dispatch_sync(dispatch_get_main_queue(), ^{
-    // 主线程更新UI
-    [_zoomInfoView setFrame:zoomRect];
-  });
-  */
+   //线程
+   dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+   // 异步执行任务创建方法
+   dispatch_async(queue, ^{
+     NSRect zoomImageViewRect = NSMakeRect(event.locationInWindow.x-scaleWidth/2.0, srect.size.height-(event.locationInWindow.y)-scaleHeight/2.0, scaleWidth, scaleHeight);
+     CGImageRef screenImageRef = createCGImageRefFromNSImage(_image);
+     CGFloat ratio = [[NSScreen mainScreen] backingScaleFactor];
+     zoomImageViewRect.origin.x *= ratio;
+     zoomImageViewRect.origin.y *= ratio;
+     zoomImageViewRect.size.width *= ratio;
+     zoomImageViewRect.size.height *= ratio;
+   // 这里放异步执行任务代码
+     CGImageRef imageRef = CGImageCreateWithImageInRect(screenImageRef, zoomImageViewRect);
+     CGImageRelease(screenImageRef);
+     NSImage *zoomImage = createNSImageFromCGImageRef(imageRef);
+     CGImageRelease(imageRef);
+     
+     
+     dispatch_sync(dispatch_get_main_queue(), ^{
+       // 主线程更新UI
+       [_zoomInfoView SetZoomImage:zoomImage];
+       [_zoomInfoView SetCurrentPoint:event.locationInWindow];
+       [zoomImage lockFocus];
+       NSColor *pixelColor = NSReadPixel(NSMakePoint(zoomImage.size.width/2.0, zoomImage.size.height/2.0));
+       NSColor *color = [pixelColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+       [_zoomInfoView SetCurrentColor:color];
+       [zoomImage unlockFocus];
+       NSPoint zoomPt = NSMakePoint(event.locationInWindow.x+20, event.locationInWindow.y-_zoomInfoView.frame.size.height);
+       NSRect zoomRect = _zoomInfoView.frame;
+       zoomRect.origin = zoomPt;
+       if (NSMaxX(zoomRect) > srect.size.width) {
+         zoomPt.x = event.locationInWindow.x-20-_zoomInfoView.frame.size.width;
+         zoomRect.origin = zoomPt;
+       }
+       if (NSMinY(zoomRect) < 30) {
+         zoomPt.y = event.locationInWindow.y;
+         zoomRect.origin = zoomPt;
+       }
+       [_zoomInfoView setFrame:zoomRect];
+     });
+   
+   });
+  
 }
 
 - (void)reSetLeftTopInfoView {
@@ -243,7 +249,7 @@ const int kDRAG_POINT_LEN = 5;
   _assetView = [[MJCaptureAssetView alloc] initWithFrame:NSMakeRect(0, 0, 350, 40)];
   [self addSubview:_assetView];
   [_assetView setHidden:YES];
-  
+  [SnipManager sharedInstance].captureState = CAPTURE_STATE_ADJUST;
   [self setNeedsDisplay:YES];
 }
 
@@ -456,6 +462,7 @@ const int kDRAG_POINT_LEN = 5;
   [app_delegate sendMessageTo115Browser:image];
   
   [_pointInfoView setHidden:NO];
+  [SnipManager sharedInstance] endCapture:<#(NSImage *)#>
   [self setNeedsDisplay:YES];
 }
 
