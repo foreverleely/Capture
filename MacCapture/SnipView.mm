@@ -241,7 +241,23 @@ const int kDRAG_POINT_LEN = 5;
 }
 
 - (void)reSetToolbarView {
-  [_toolbarView setFrameOrigin:NSMakePoint(_drawingRect.origin.x+_drawingRect.size.width-_toolbarView.frame.size.width, _drawingRect.origin.y-_toolbarView.frame.size.height)];
+  NSRect oldRect = [_toolbarView frame];
+  oldRect.origin = NSMakePoint(_drawingRect.origin.x+_drawingRect.size.width-_toolbarView.frame.size.width, _drawingRect.origin.y-_toolbarView.frame.size.height);
+  NSRect screenRect = [_screen frame];
+  if (oldRect.origin.x < 0) {
+    oldRect.origin.x = 0;
+  }
+  if (oldRect.origin.y < 0) {
+    oldRect.origin.y = NSMaxY(_drawingRect);
+  }
+  if (oldRect.origin.x+oldRect.size.width>screenRect.size.width) {
+    oldRect.origin.x = screenRect.size.width-oldRect.size.width;
+  }
+  if (oldRect.origin.y+oldRect.size.height>screenRect.size.height) {
+    oldRect.origin.y = screenRect.size.height-oldRect.size.height;
+  }
+  [_toolbarView setFrame:oldRect];
+  //[_toolbarView setFrameOrigin:NSMakePoint(_drawingRect.origin.x+_drawingRect.size.width-_toolbarView.frame.size.width, _drawingRect.origin.y-_toolbarView.frame.size.height)];
 }
 
 - (void)CleanOpationAndReStart{
