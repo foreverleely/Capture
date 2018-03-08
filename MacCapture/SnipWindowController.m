@@ -97,7 +97,7 @@ const int kAdjustKnown = 8;
         }
 
     }
-    //NSLog(@"capture-----%@",NSStringFromRect(self.captureWindowRect));
+    NSLog(@"Search success, The captureWindowRect is %@",NSStringFromRect(self.captureWindowRect));
     if ([SnipUtil isPoint:mouseLocation inRect:screenFrame]) {
         [self redrawView:self.originImage];
     }
@@ -417,8 +417,13 @@ const int kAdjustKnown = 8;
 - (void)mouseMoved:(NSEvent *)theEvent
 {
   //如果在刚开启截图时，才去寻找鼠标所在的窗口
+  NSLog(@"Now in %@",self.screenIdentification);
+  
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_HILIGHT) {
+      NSLog(@"searching the hight window");
         [self captureAppScreen];
+    } else {
+      NSLog(@"donot searching");
     }
 }
 

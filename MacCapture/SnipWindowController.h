@@ -11,6 +11,9 @@
 #import "MouseEventProtocol.h"
 
 @interface SnipWindowController : NSWindowController <NSWindowDelegate, MouseEventProtocol>
+// only use to help log message
+@property (strong) NSString* screenIdentification;
 
 - (void)startCaptureWithScreen:(NSScreen *)screen;
+
 @end

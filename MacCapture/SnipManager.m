@@ -82,10 +82,18 @@ const int kKEY_ESC_CODE = 53;
         [self.arrayRect addObject:windowDescriptionDictionary];
     }
   //获取屏幕数量
-  int i = 0;
+  int i = 1;
     for (NSScreen *screen in [NSScreen screens]) {
-      //NSLog(@"screens %d", ++i);
+      
         SnipWindowController *snipController = [[SnipWindowController alloc] init];
+      
+      if (i == 1) {
+        snipController.screenIdentification = @"Main screen";
+        i++;
+      } else {
+        snipController.screenIdentification = @"Expansion screen";
+      }
+      
         SnipWindow *snipWindow = [[SnipWindow alloc] initWithContentRect:[screen frame] styleMask:NSNonactivatingPanelMask backing:NSBackingStoreBuffered defer:NO screen:screen];
         snipController.window = snipWindow;
         SnipView *snipView = [[SnipView alloc] initWithFrame:NSMakeRect(0, 0, [screen frame].size.width, [screen frame].size.height)];
