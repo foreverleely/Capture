@@ -69,7 +69,6 @@ const int kAdjustKnown = 8;
 {
     NSScreen *screen = self.window.screen;
     NSPoint mouseLocation = [NSEvent mouseLocation];
-    //NSLog(@"screen:%@ mouse:%@",NSStringFromRect(screen.frame),NSStringFromPoint(mouseLocation));
     NSRect screenFrame = [screen frame];
     self.captureWindowRect = screenFrame;
     double minArea = screenFrame.size.width * screenFrame.size.height;
@@ -97,7 +96,7 @@ const int kAdjustKnown = 8;
         }
 
     }
-    NSLog(@"Search success, The captureWindowRect is %@",NSStringFromRect(self.captureWindowRect));
+    NSLogM(@"Search success, The captureWindowRect is %@",NSStringFromRect(self.captureWindowRect));
     if ([SnipUtil isPoint:mouseLocation inRect:screenFrame]) {
         [self redrawView:self.originImage];
     }
@@ -417,13 +416,13 @@ const int kAdjustKnown = 8;
 - (void)mouseMoved:(NSEvent *)theEvent
 {
   //如果在刚开启截图时，才去寻找鼠标所在的窗口
-  NSLog(@"Now in %@",self.screenIdentification);
+  NSLogM(@"Now in %@",self.screenIdentification);
   
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_HILIGHT) {
-      NSLog(@"searching the hight window");
+      NSLogM(@"searching the hight window");
         [self captureAppScreen];
     } else {
-      NSLog(@"donot searching");
+      NSLogM(@"donot searching");
     }
 }
 

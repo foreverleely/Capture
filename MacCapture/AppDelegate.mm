@@ -34,13 +34,10 @@ BOOL g_captureShouldKeepRunning = YES;        // global
 @synthesize hotKey, isSavePitureAs1x_, isSaveToDeskDefault_;
 
 - (void) hotkeyWithEvent:(NSEvent *)hkEvent {
-//    NSLog(@"%@", [NSString stringWithFormat:@"Firing -[%@ %@]", NSStringFromClass([self class]), NSStringFromSelector(_cmd)]);
-    NSLog(@"MacCapture hotkeyWithEvent: %@", [NSString stringWithFormat:@"Hotkey event: %@", hkEvent]);
     [self beginCapture:nil];
 }
 
 - (void) addOutput:(NSString *)newOutput {
-    NSLog(@"%@", newOutput);
 }
 
 - (void)closeMacCaptureApp:(NSObject *)object
@@ -53,12 +50,9 @@ BOOL g_captureShouldKeepRunning = YES;        // global
     NSRunningApplication *runApp = [[no userInfo] valueForKey:@"NSWorkspaceApplicationKey"];
     NSString *strAppID = runApp.bundleIdentifier;
     NSString *strBrowserID = [NSString stringWithFormat:@"%@", @"org.115browser.115Browser"];
-    //NSLog(@"BrowserTerminated: bundleIdentifier1--:%@, %lu", strAppID, [strAppID length]);
-    //NSLog(@"BrowserTerminated: bundleIdentifier2--:%@, %lu", strBrowserID, [strBrowserID length]);
-    //i don't know why the id is equal, but use isEqualToString return false, so use this replace
     if ([strAppID containsString:@"115Browser"] && ([strAppID length] == [strBrowserID length])){
         //在115电脑版挂掉的时候，可以检测自动退出
-        NSLog(@"BrowserTerminated: %@", @"检测到主进程没启动了，则退出");
+        //NSLog(@"BrowserTerminated: %@", @"检测到主进程没启动了，则退出");
         [self closeMacCaptureApp:nil];
     }
     if ([strBrowserID isEqualToString:strAppID]){
@@ -69,11 +63,6 @@ void GetContent(std::string *out_response_string){
     std::string strValue = "applicationWillFinishLaunching: 已经正在运行，不用再次启动";
     const char *szContent = strValue.c_str();
     int length = strlen(szContent);
-
-//    for (int i = 0; i < length; i++) {
-//        out_response_string->append(&szContent[i], 1);
-//        //NSLog(@"TestString:  %c", szContent[i]);
-//    }
 
     int spos = 10;
     while (length > 0) {
@@ -96,18 +85,13 @@ void GetContent(std::string *out_response_string){
     int run_count = 0;
     for (int i = 0; i < [array count]; i++){
         NSRunningApplication *app = [array objectAtIndex:i];
-        //NSLog(@"%@", [app bundleIdentifier]);
         if ([[app bundleIdentifier] isEqualToString:@"jacky.115.com.MacCapture"]) {
             run_count += 1;
             break;
         }
     }
-//    std::string strContent = "\0";
-//    GetContent(&strContent);
-//    NSLog(@"TestString:  %@", [NSString stringWithUTF8String:strContent.c_str()]);
-
     if (run_count > 1) {
-        NSLog(@"applicationWillFinishLaunching: %@", @"已经正在运行，不用再次启动");
+        //NSLog(@"applicationWillFinishLaunching: %@", @"已经正在运行，不用再次启动");
         [NSApp terminate:nil];
     }
 }
@@ -151,9 +135,8 @@ void GetContent(std::string *out_response_string){
 }
 - (void)applicationWillTerminate:(NSNotification *)notification{
     [self performSelector:@selector(stopConnectionThread) onThread:msgThread withObject:nil waitUntilDone:YES];
-    NSLog(@"applicationWillTerminate: %@", notification);
-    
-    //[self removeThe115ClientDockIcon];
+    //NSLog(@"applicationWillTerminate: %@", notification);
+  
 }
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -199,7 +182,7 @@ void GetContent(std::string *out_response_string){
 }
 - (IBAction) beginCapture:(id)sender{
   BOOL isIn115 = false;
-  
+  [[NSPasteboard generalPasteboard] clearContents];
   if (isIn115) {
     if (!isInitFromBrowser_) {
       isInitFromBrowser_ = YES;
@@ -211,29 +194,13 @@ void GetContent(std::string *out_response_string){
   
   [[SnipManager sharedInstance] startCapture];
   return;
-  
-    [[NSPasteboard generalPasteboard] clearContents];
-    if (!captureWindow_) {
-        //[NSApp activateIgnoringOtherApps:YES];
-        NSScreen *screen = [NSScreen mainScreen];
-        NSRect rect = [screen frame];
-        NSLog(@"screens: %@",[NSScreen screens]);
-        int nval = 0;
-        rect.origin.x += nval;
-        rect.size.width -= nval;
-        captureWindow_ = [[MJCaptureWindow alloc] initWithContentRect:rect styleMask:NSBorderlessWindowMask backing:NSBackingStoreRetained defer:YES];
-        [captureWindow_ disableFlushWindow];
-        captureWindow_.styleMask = NSPopUpMenuWindowLevel;
-      
-    }
-    //[self performSelector:@selector(SetMouseEnventForFirst) withObject:nil afterDelay:0.26];
 }
 
 
 #pragma mark 创建server，接收从115Browser过来的消息
 - (void)createNewConnectionThread
 {
-    NSLog(@"capture-client-: createNewConnectionThread: begin");
+  
     NSAutoreleasePool * pool = [NSAutoreleasePool new];
     //setup server connection
     NSConnection *serverConnection = [NSConnection new];
@@ -247,7 +214,6 @@ void GetContent(std::string *out_response_string){
     [runLoop addPort:port forMode:NSDefaultRunLoopMode]; // adding some input source, that is required for runLoop to runing
     // starting infinite loop which can be stopped by changing the shouldKeepRunning's value
     while (g_captureShouldKeepRunning && [runLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]){
-        NSLog(@"capture-client-: createNewConnectionThread: running");
     }
     if (port.valid) {
         [port invalidate];
@@ -255,7 +221,6 @@ void GetContent(std::string *out_response_string){
     if (serverConnection.valid){
         [serverConnection invalidate];
     }
-    NSLog(@"capture-client-: createNewConnectionThread: stop");
     //[myRunLoop run];
     [pool release];
 }
@@ -284,14 +249,11 @@ void GetContent(std::string *out_response_string){
         [strSavePath_ release];
     }
     strSavePath_ = [[NSString alloc] initWithString:[dic objectForKey:@"kSaveDefaultPath"]];
-    //NSLog(@"strSavePath_: %@", strSavePath_);
-
   [self cleanHotCapture:nil];
 }
 
 - (void)beginCaptureImage:(NSObject *)object
 {
-    //NSLog(@"- (void)beginCaptureImage: %@", object);
     [self performSelectorOnMainThread:@selector(beginCapture:) withObject:nil waitUntilDone:NO];
 }
 
@@ -314,7 +276,6 @@ void GetContent(std::string *out_response_string){
 }
 - (void)sendInitSettingInfoTo115Browser:(NSMutableDictionary*)dic
 {
-    //NSLog(@"sendInitSettingInfoTo115Browser:  %@", dic);
     NSDistantObject *drawer = [NSConnection rootProxyForConnectionWithRegisteredName:kDistributedObjectServerNameKey host:nil];
     [drawer performSelector:@selector(requestInitCaptureInfo:) withObject:dic];
 }

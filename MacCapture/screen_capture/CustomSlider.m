@@ -75,9 +75,7 @@
     CGFloat thumbWidth = [_thumbImageView_ frame].size.width;
     
     CGFloat rangeX = width / (maximum_value_ - minimum_value_) * sliderValue_;
-    
-    //NSLog(@"CustomSlider rangeX=%f, slider value=%f", rangeX, sliderValue_);
-    
+  
     int availRange = width - thumbWidth;
     if(rangeX<0 || rangeX>availRange)
         return;
@@ -88,8 +86,6 @@
     }else if(sliderValue_ > 95){
         rangeX = availRange;
     }
-    //NSLog(@"CustomSlider rangeX=%f, slider value=%f", rangeX, sliderValue_);
-    
     CGRect rectRange = [_rangeImageView_ frame];
     rectRange.size.width = rangeX;
     _rangeImageView_.frame = rectRange;
@@ -111,20 +107,16 @@
     
     if(gesture.state == NSGestureRecognizerStateBegan)
     {
-        //NSLog(@"gesture NSGestureRecognizerStateBegan...");
-        
         CGPoint tempPoint = NSMakePoint(0, 0);
         tempPoint.x = rectRange_.size.width + translation.x;
         [gesture setTranslation:tempPoint inView:self];
         
     }else if(gesture.state == NSGestureRecognizerStateChanged)
     {
-        //NSLog(@"gesture NSGestureRecognizerStateChanged...");
-        
         CGFloat width = [self frame].size.width;
         unsigned major, minor, bugFix;
         [self getSystemVersionMajor:&major minor:&minor bugFix:&bugFix];
-        NSLog(@"%u.%u.%u", major, minor, bugFix);
+        //NSLog(@"%u.%u.%u", major, minor, bugFix);
         if(major == 10){
             if(minor >= 12){ //如果系统是10.12以上
                 sliderValue_ = translation.x / width * (maximum_value_ - minimum_value_);
