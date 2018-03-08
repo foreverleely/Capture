@@ -269,7 +269,8 @@ const int kDRAG_POINT_LEN = 5;
   _assetView = [[MJCaptureAssetView alloc] initWithFrame:NSMakeRect(0, 0, 350, 40)];
   [self addSubview:_assetView];
   [_assetView setHidden:YES];
-  [SnipManager sharedInstance].captureState = CAPTURE_STATE_ADJUST;
+  [SnipManager sharedInstance].captureState = CAPTURE_STATE_HILIGHT;
+  self.drawingRect = NSZeroRect;
   [self setNeedsDisplay:YES];
 }
 

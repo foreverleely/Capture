@@ -548,18 +548,12 @@
         }
     }else if ([btnSave_ isEqual:sender]) {
         [self CreatSaveImage:YES];
-        [NSApp stopModal];
-        [NSApp endSheet:[self window]];
-        [[self window] close];
+      [[SnipManager sharedInstance] endCaptureimage];
     }else if ([btnCancel_ isEqual:sender]) {
-        [NSApp stopModal];
-        [NSApp endSheet:[self window]];
-        [[self window] close];
+        [[SnipManager sharedInstance] endCaptureimage];
     }else if ([btnOK_ isEqual:sender]) {
         [self CreatSaveImage:NO];
-        [NSApp stopModal];
-        [NSApp endSheet:[self window]];
-        [[self window] close];
+        [[SnipManager sharedInstance] endCaptureimage];
     }
     
     
