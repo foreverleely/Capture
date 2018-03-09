@@ -17,6 +17,7 @@
 #import "MJMosaicView.h"
 #import "MJMosaicUtil.h"
 #import "MJPersistentUtil.h"
+#import "SnipWindowController.h"
 
 #import "AppDelegate.h"
 const int kDRAG_POINT_NUM = 8;
@@ -260,7 +261,7 @@ const int kDRAG_POINT_LEN = 5;
   //[_toolbarView setFrameOrigin:NSMakePoint(_drawingRect.origin.x+_drawingRect.size.width-_toolbarView.frame.size.width, _drawingRect.origin.y-_toolbarView.frame.size.height)];
 }
 
-- (void)CleanOpationAndReStart{
+- (void)cleanOpationAndReStart{
   _isAfterClean = YES;
   //设置状态
   [_toolbarView setHidden:YES];
@@ -270,6 +271,7 @@ const int kDRAG_POINT_LEN = 5;
   [self addSubview:_assetView];
   [_assetView setHidden:YES];
   [SnipManager sharedInstance].captureState = CAPTURE_STATE_HILIGHT;
+  [((SnipWindowController*)self.window.windowController) captureAppScreen];
   [self setNeedsDisplay:YES];
 }
 

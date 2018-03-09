@@ -542,7 +542,7 @@
             [btnUndo_ setNeedsDisplay:YES];
             NSLog(@"btnUndo_ 1");
         }else{
-            [((SnipView*)[self superview]) CleanOpationAndReStart];
+            [((SnipView*)[self superview]) cleanOpationAndReStart];
             [self resetToolbarBtnStatus];
             NSLog(@"btnUndo_ 2");
         }

@@ -235,7 +235,7 @@ const int kAdjustKnown = 8;
 
 - (void)onNotifyMouseChange:(NSNotification *)notify
 {
-    if (notify.userInfo[@"context"] == self) return;
+    //if (notify.userInfo[@"context"] == self) return;
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_HILIGHT && self.window.isVisible && [SnipUtil isPoint:[NSEvent mouseLocation] inRect:self.window.screen.frame]) {
 
         __weak __typeof__(self) weakSelf = self;
