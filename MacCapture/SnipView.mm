@@ -270,7 +270,6 @@ const int kDRAG_POINT_LEN = 5;
   [self addSubview:_assetView];
   [_assetView setHidden:YES];
   [SnipManager sharedInstance].captureState = CAPTURE_STATE_HILIGHT;
-  self.drawingRect = NSZeroRect;
   [self setNeedsDisplay:YES];
 }
 
@@ -321,6 +320,7 @@ const int kDRAG_POINT_LEN = 5;
     }
   }
 }
+
 - (void)makeSelectSlideTextViewFocus{
   NSArray *array = [_assetView subviews];
   for (int i = 0; i < [array count]; i++){
@@ -511,7 +511,7 @@ const int kDRAG_POINT_LEN = 5;
 
 ///
 - (void)keyDown:(NSEvent *)theEvent{
-  
+  NSLog(@"keyDown");
   //add by liuchipeng 2016.1.6{按下方向键移动选择框
   if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_EDIT) {
     if(theEvent.keyCode==124){

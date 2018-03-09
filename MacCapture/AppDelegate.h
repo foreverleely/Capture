@@ -7,8 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "MJCaptureWindow.h"
-
 #import "DDHotKeyCenter.h"
 #import <Carbon/Carbon.h>
 
@@ -38,8 +36,6 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate, MacCaptureClientProtocol>{
     NSThread* msgThread;
-    
-    MJCaptureWindow *captureWindow_;
     
     IBOutlet TestPopUpButton *testPop;
     

@@ -42,11 +42,8 @@
 		EC5B77151BB84E2400CC045E /* MJCaptureAssetView.mm in Sources */ = {isa = PBXBuildFile; fileRef = EC5B77061BB84E2400CC045E /* MJCaptureAssetView.mm */; };
 		EC5B77161BB84E2400CC045E /* MJCaptureCustonButton.mm in Sources */ = {isa = PBXBuildFile; fileRef = EC5B77081BB84E2400CC045E /* MJCaptureCustonButton.mm */; };
 		EC5B77171BB84E2400CC045E /* MJCaptureModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = EC5B770A1BB84E2400CC045E /* MJCaptureModel.mm */; };
-		EC5B77181BB84E2400CC045E /* MJCaptureSelectRangeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = EC5B770C1BB84E2400CC045E /* MJCaptureSelectRangeView.mm */; };
 		EC5B77191BB84E2400CC045E /* MJCaptureSlideView.mm in Sources */ = {isa = PBXBuildFile; fileRef = EC5B770E1BB84E2400CC045E /* MJCaptureSlideView.mm */; };
 		EC5B771A1BB84E2400CC045E /* MJCaptureToolBarView.mm in Sources */ = {isa = PBXBuildFile; fileRef = EC5B77101BB84E2400CC045E /* MJCaptureToolBarView.mm */; };
-		EC5B771B1BB84E2400CC045E /* MJCaptureView.mm in Sources */ = {isa = PBXBuildFile; fileRef = EC5B77121BB84E2400CC045E /* MJCaptureView.mm */; };
-		EC5B771C1BB84E2400CC045E /* MJCaptureWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = EC5B77141BB84E2400CC045E /* MJCaptureWindow.mm */; };
 		EC5C5BF61DB47E7000F4B94E /* MJPersistentUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EC5C5BF51DB47E7000F4B94E /* MJPersistentUtil.m */; };
 		ECBABEB21B86393900B648BB /* mj_capture_big_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = ECBABE961B86393900B648BB /* mj_capture_big_circle.png */; };
 		ECBABEB31B86393A00B648BB /* mj_capture_big_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ECBABE971B86393900B648BB /* mj_capture_big_circle@2x.png */; };
@@ -163,16 +160,10 @@
 		EC5B77081BB84E2400CC045E /* MJCaptureCustonButton.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MJCaptureCustonButton.mm; sourceTree = "<group>"; };
 		EC5B77091BB84E2400CC045E /* MJCaptureModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJCaptureModel.h; sourceTree = "<group>"; };
 		EC5B770A1BB84E2400CC045E /* MJCaptureModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MJCaptureModel.mm; sourceTree = "<group>"; };
-		EC5B770B1BB84E2400CC045E /* MJCaptureSelectRangeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJCaptureSelectRangeView.h; sourceTree = "<group>"; };
-		EC5B770C1BB84E2400CC045E /* MJCaptureSelectRangeView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MJCaptureSelectRangeView.mm; sourceTree = "<group>"; };
 		EC5B770D1BB84E2400CC045E /* MJCaptureSlideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJCaptureSlideView.h; sourceTree = "<group>"; };
 		EC5B770E1BB84E2400CC045E /* MJCaptureSlideView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MJCaptureSlideView.mm; sourceTree = "<group>"; };
 		EC5B770F1BB84E2400CC045E /* MJCaptureToolBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJCaptureToolBarView.h; sourceTree = "<group>"; };
 		EC5B77101BB84E2400CC045E /* MJCaptureToolBarView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MJCaptureToolBarView.mm; sourceTree = "<group>"; };
-		EC5B77111BB84E2400CC045E /* MJCaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJCaptureView.h; sourceTree = "<group>"; };
-		EC5B77121BB84E2400CC045E /* MJCaptureView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MJCaptureView.mm; sourceTree = "<group>"; };
-		EC5B77131BB84E2400CC045E /* MJCaptureWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJCaptureWindow.h; sourceTree = "<group>"; };
-		EC5B77141BB84E2400CC045E /* MJCaptureWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MJCaptureWindow.mm; sourceTree = "<group>"; };
 		EC5C5BF41DB47E7000F4B94E /* MJPersistentUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPersistentUtil.h; sourceTree = "<group>"; };
 		EC5C5BF51DB47E7000F4B94E /* MJPersistentUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPersistentUtil.m; sourceTree = "<group>"; };
 		ECBABE961B86393900B648BB /* mj_capture_big_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mj_capture_big_circle.png; sourceTree = "<group>"; };
@@ -375,16 +366,10 @@
 				EC5B77081BB84E2400CC045E /* MJCaptureCustonButton.mm */,
 				EC5B77091BB84E2400CC045E /* MJCaptureModel.h */,
 				EC5B770A1BB84E2400CC045E /* MJCaptureModel.mm */,
-				EC5B770B1BB84E2400CC045E /* MJCaptureSelectRangeView.h */,
-				EC5B770C1BB84E2400CC045E /* MJCaptureSelectRangeView.mm */,
 				EC5B770D1BB84E2400CC045E /* MJCaptureSlideView.h */,
 				EC5B770E1BB84E2400CC045E /* MJCaptureSlideView.mm */,
 				EC5B770F1BB84E2400CC045E /* MJCaptureToolBarView.h */,
 				EC5B77101BB84E2400CC045E /* MJCaptureToolBarView.mm */,
-				EC5B77111BB84E2400CC045E /* MJCaptureView.h */,
-				EC5B77121BB84E2400CC045E /* MJCaptureView.mm */,
-				EC5B77131BB84E2400CC045E /* MJCaptureWindow.h */,
-				EC5B77141BB84E2400CC045E /* MJCaptureWindow.mm */,
 				EC4FB0441BBAC103001FF9B1 /* MJCaptureInfoView.h */,
 				EC4FB0451BBAC103001FF9B1 /* MJCaptureInfoView.mm */,
 			);
@@ -605,7 +590,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC5B77151BB84E2400CC045E /* MJCaptureAssetView.mm in Sources */,
-				EC5B771C1BB84E2400CC045E /* MJCaptureWindow.mm in Sources */,
 				B2FD1EDD1B80D81D00C86D15 /* AppDelegate.mm in Sources */,
 				EC5B77191BB84E2400CC045E /* MJCaptureSlideView.mm in Sources */,
 				ECE8C13F1D9A9597008DF82B /* CustomSlider.m in Sources */,
@@ -624,9 +608,7 @@
 				EC5B771A1BB84E2400CC045E /* MJCaptureToolBarView.mm in Sources */,
 				ECE8C1411D9A9597008DF82B /* MJMosaicView.mm in Sources */,
 				029A1D23204E2CFB003A3B59 /* SnipWindowController.m in Sources */,
-				EC5B771B1BB84E2400CC045E /* MJCaptureView.mm in Sources */,
 				EC4E84C51B8C7D9500E1A2D8 /* DDHotKeyCenter.m in Sources */,
-				EC5B77181BB84E2400CC045E /* MJCaptureSelectRangeView.mm in Sources */,
 				EC5B77161BB84E2400CC045E /* MJCaptureCustonButton.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

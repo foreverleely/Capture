@@ -8,8 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "MJCaptureModel.h"
-#import "MJCaptureSelectRangeView.h"
 @class MJCaptureSlideView;
+
+
 
 @interface MJCaptureSlideTextView : NSTextView{
     BOOL isMouseDoubleClick_;

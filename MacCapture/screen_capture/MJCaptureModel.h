@@ -21,6 +21,20 @@ typedef enum MJCToolBarFunType{
     MJCToolBarFunMosaic
 }MJCToolBarFunType;
 
+typedef enum MJCMouseState{
+  MJCMouseLeftBotton,       //0
+  MJCMouseLeftMid,          //1
+  MJCMouseLeftTop,          //2
+  MJCMouseTopMid,           //3
+  MJCMouseRightTop,         //4
+  MJCMouseRightMid,         //5
+  MJCMouseRightBotton,      //6
+  MJCMouseBottomMid,        //7
+  
+  MJCMouseInCropMove,       //8
+  MJCMouseOutCropRotation   //9
+}MJCMouseState;
+
 @interface NSImage (MJCaptureImage)
 - (NSBitmapImageRep *)bitmapImageRepresentation;
 @end

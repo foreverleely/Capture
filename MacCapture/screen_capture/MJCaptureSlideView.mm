@@ -7,11 +7,9 @@
 //
 
 #import "MJCaptureSlideView.h"
-#import "MJCaptureView.h"
-#import "MJCaptureWindow.h"
+#import "SnipView.h"
 #import "MJCaptureAssetView.h"
 #import "MJCaptureModel.h"
-#import "MJCaptureView.h"
 #import "SnipManager.h"
 
 
@@ -90,10 +88,10 @@
         view = [view superview];
     }
     NSView *viewCature = view;
-    while (![viewCature isKindOfClass:[MJCaptureView class]]) {
+    while (![viewCature isKindOfClass:[SnipView class]]) {
         viewCature = [viewCature superview];
     }
-  [(MJCaptureView*)viewCature hideSlideShapeView];
+  [(SnipView*)viewCature hideSlideShapeView];
   [(MJCaptureSlideView*)view reDrawToolbarView];
     if (isMouseDoubleClick_) {
         [(MJCaptureSlideView*)view setIsHasForcus_:YES];
@@ -105,7 +103,7 @@
         [(MJCaptureSlideView*)view setIsHasForcus_:NO];
         [(MJCaptureSlideView*)view setIsMouseDown_:YES];
         [(MJCaptureSlideView*)view setIsPointOnPath_:NO];
-        [(MJCaptureView*)viewCature showSlideShapeView:((MJCaptureSlideView*)view)];
+        [(SnipView*)viewCature showSlideShapeView:((MJCaptureSlideView*)view)];
     }
     isMouseDoubleClick_ = NO;
 }
@@ -335,7 +333,7 @@
 - (void)reCaculateTextSize{
     [scrollView_ setHasVerticalScroller:NO];
     [scrollView_ setAutohidesScrollers:NO];
-    [(MJCaptureView*)([[self superview] superview]) hideSlideShapeView];
+    [(SnipView*)([[self superview] superview]) hideSlideShapeView];
     NSDictionary* attributesDictionary = @{
                                            NSFontAttributeName:
                                                [NSFont systemFontOfSize:nFontSize_]
@@ -368,8 +366,8 @@
     [_slideTextView selectAll:nil];
     [_slideTextView setFont:[NSFont systemFontOfSize:nFontSize_]];
     
-    if (![(MJCaptureView*)([[self superview] superview]) isHiddenSlideShapeView]) {
-        [(MJCaptureView*)([[self superview] superview]) showSlideShapeView:self];
+    if (![(SnipView*)([[self superview] superview]) isHiddenSlideShapeView]) {
+        [(SnipView*)([[self superview] superview]) showSlideShapeView:self];
     }
     [[self window] makeFirstResponder:_slideTextView];
     [_slideTextView setDelegate:nil];
@@ -539,13 +537,13 @@
         isPointOnPath_ = YES;
         
         NSLog(@"MJCaptureSlideView mouseDown showSlideShapeView");
-        [(MJCaptureView*)([[self superview] superview]) showSlideShapeView:self];
+        [(SnipView*)([[self superview] superview]) showSlideShapeView:self];
         
-        MJCaptureView* mjview = (MJCaptureView*)[[self superview] superview];
+        SnipView* mjview = (SnipView*)[[self superview] superview];
         [mjview.toolbarView ResetLingWidthType:nLineWidth_];
         [self reDrawToolbarView];
     }else{
-        [(MJCaptureView*)([[self superview] superview]) hideSlideShapeView];
+        [(SnipView*)([[self superview] superview]) hideSlideShapeView];
         [super mouseDown:theEvent];
     }
     
@@ -617,7 +615,7 @@
 
 -(void)reDrawToolbarView{
   
-    MJCaptureView *mjview = (MJCaptureView*)([[self superview] superview]);
+    SnipView *mjview = (SnipView*)([[self superview] superview]);
     //MJCToolBarFunType funType = [SnipManager sharedInstance].funType;
     switch (funType_) {
         case MJCToolBarFunRectangle:{
@@ -1049,9 +1047,9 @@
 //获取slideshapeview所属的slidView
 -(MJCaptureSlideView*)getFocusSlideView{
     MJCaptureSlideView* newView = nil;
-    MJCaptureView* captureView = (MJCaptureView*)[self superview];
-    while (![captureView isKindOfClass:[MJCaptureView class]]) {
-        captureView = (MJCaptureView*)[captureView superview];
+    SnipView* captureView = (SnipView*)[self superview];
+    while (![captureView isKindOfClass:[SnipView class]]) {
+        captureView = (SnipView*)[captureView superview];
     }
     MJCaptureAssetView* assetView = [captureView assetView];
     NSUInteger subviewsCount = [assetView.subviews count];
@@ -1075,7 +1073,7 @@
 }
 -(MJCaptureSlideView*)getArrowSlideView{
     MJCaptureSlideView* newView = nil;
-    MJCaptureAssetView* assetView = [(MJCaptureView*)self.superview assetView];
+    MJCaptureAssetView* assetView = [(SnipView*)self.superview assetView];
     NSUInteger subviewsCount = [assetView.subviews count];
     for (int i=0; i<subviewsCount; i++) {
         NSView* viewAt = [assetView.subviews objectAtIndex:i];
@@ -1091,7 +1089,7 @@
 }
 -(MJCaptureSlideView*)getLastSlideView{
     MJCaptureSlideView* newView = nil;
-    MJCaptureAssetView* assetView = [(MJCaptureView*)self.superview assetView];
+    MJCaptureAssetView* assetView = [(SnipView*)self.superview assetView];
     newView = [[assetView subviews] lastObject];
     return newView;
 }
@@ -1102,7 +1100,7 @@
     firstMouseDonwPoint_ = theEvent.locationInWindow;
     ArrowSlideView_ = [self getArrowSlideView];
     /*-------------------------------------------------------------------*/
-    MJCaptureAssetView* view = (MJCaptureAssetView*)[(MJCaptureView*)[self superview] assetView];
+    MJCaptureAssetView* view = (MJCaptureAssetView*)[(SnipView*)[self superview] assetView];
     NSPoint tempPoint = [self convertPoint:firstMouseDonwPoint_ fromView:nil];
     if (NSPointInRect(tempPoint, focusre[0])) {
         view.isPointInfirst = YES;
@@ -1111,9 +1109,9 @@
     }
     /*-------------------------------------------------------------------*/
     if (theEvent.clickCount >= 2) {
-        [(MJCaptureView*)[self superview] upSelectSlideViewRect];
+        [(SnipView*)[self superview] upSelectSlideViewRect];
         [self setHidden:YES];
-        [(MJCaptureView*)[self superview] makeSelectSlideTextViewFocus];
+        [(SnipView*)[self superview] makeSelectSlideTextViewFocus];
         return;
     }
     
@@ -1130,12 +1128,12 @@
         && ((MJCaptureSlideView *)[self getFocusSlideView]).isHasForcus_) {
         return;
     }
-    MJCaptureAssetView* view = (MJCaptureAssetView*)[(MJCaptureView*)[self superview] assetView];
+    MJCaptureAssetView* view = (MJCaptureAssetView*)[(SnipView*)[self superview] assetView];
     view.isPointInfirst = NO;
     [view setIsEditing_:NO];
     _crossArrow = NO;
     NSPoint pt = theEvent.locationInWindow;
-    [(MJCaptureView*)[self superview] upSelectSlideViewRect];
+    [(SnipView*)[self superview] upSelectSlideViewRect];
     
     //add by liuchipeng 2015.1.21 {
     BOOL change = (state_ == MJCMouseInCropMove) ? NO : YES;
@@ -1150,12 +1148,12 @@
             MJCaptureSlideView *newView = [self getLastSlideView];
             newView.isMouseDown_ = YES;
             newView.isHasForcus_ = YES;
-            [(MJCaptureView*)[self superview] showSlideShapeView:newView];
+            [(SnipView*)[self superview] showSlideShapeView:newView];
         }
         /*-----------------------------------------------------------------*/
     }else{//拖动后更新箭头前后2点坐标
         ArrowSlideView_ = [self getArrowSlideView];
-        MJCaptureAssetView* view = (MJCaptureAssetView*)[(MJCaptureView*)[self superview] assetView];
+        MJCaptureAssetView* view = (MJCaptureAssetView*)[(SnipView*)[self superview] assetView];
         view.firstMouseDonwPoint = [view convertPoint:[ArrowSlideView_ firstTrianglePoint_] fromView:ArrowSlideView_];
         view.lastMousePoint = [view convertPoint:[ArrowSlideView_ secondTrianglePoint_] fromView:ArrowSlideView_];
     }
@@ -1164,7 +1162,7 @@
     [self setCursorForState:state_];
     
     MJCaptureSlideView* sview = [self getFocusSlideView];
-  [(MJCaptureView*)[self superview] showSlideShapeView:sview];
+  [(SnipView*)[self superview] showSlideShapeView:sview];
   [[SnipManager sharedInstance] setFunType:sview.funType_];
   
     //}
@@ -1176,7 +1174,7 @@
         return;
     }
     
-    [(MJCaptureView*)[self superview] upSelectSlideViewRect];
+    [(SnipView*)[self superview] upSelectSlideViewRect];
     
     //add by liuchipeng 2016.1.21{
     [super mouseDragged:theEvent];
@@ -1255,7 +1253,7 @@
     }
     newRect = NSIntegralRect(newRect);
     [self setFrame:newRect];
-    [(MJCaptureView*)[self superview] upSelectSlideViewRect];
+    [(SnipView*)[self superview] upSelectSlideViewRect];
   }
 }
 
@@ -1270,7 +1268,7 @@
     
     //  更新assetView的firstMouseDonwPoint、lastMousePoint
     ArrowSlideView_ = [self getArrowSlideView];
-    MJCaptureAssetView* view = (MJCaptureAssetView*)[(MJCaptureView*)[self superview] assetView];
+    MJCaptureAssetView* view = (MJCaptureAssetView*)[(SnipView*)[self superview] assetView];
     view.firstMouseDonwPoint = [view convertPoint:[ArrowSlideView_ firstTrianglePoint_] fromView:ArrowSlideView_];
     view.lastMousePoint = [view convertPoint:[ArrowSlideView_ secondTrianglePoint_] fromView:ArrowSlideView_];
     

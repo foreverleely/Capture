@@ -171,15 +171,7 @@ void GetContent(std::string *out_response_string){
 - (void) closeCaptureWindow{
   [[SnipManager sharedInstance] endCaptureimage];
 }
-//add by liuchipeng2016.1.6{
--(void)showKeyWindow{
-    [[captureWindow_ CaptureView] mouseMoved:[NSApp currentEvent]];
-//}
-}
-- (void) SetMouseEnventForFirst{
-    [[captureWindow_ captureView] mouseEntered:[NSApp currentEvent]];
-    [[captureWindow_ captureView] mouseMoved:[NSApp currentEvent]];
-}
+
 - (IBAction) beginCapture:(id)sender{
   BOOL isIn115 = false;
   [[NSPasteboard generalPasteboard] clearContents];

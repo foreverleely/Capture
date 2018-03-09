@@ -7,7 +7,7 @@
 //
 
 #import "MJCaptureAssetView.h"
-#import "MJCaptureView.h"
+#import "SnipView.h"
 #import "SnipManager.h"
 
 @implementation MJCaptureAssetView
@@ -454,7 +454,7 @@
     [[[[self window] undoManager] prepareWithInvocationTarget:self] RemoveCaptureSlideView:slideView];
     [slideArrayView_ addObject:slideView];
     [self addSubview:slideView];
-    [((MJCaptureView*)[self superview]) hideSlideShapeView];
+    [((SnipView*)[self superview]) hideSlideShapeView];
 }
 - (void)RemoveCaptureSlideView:(MJCaptureSlideView*)slideView{
     [[[[self window] undoManager] prepareWithInvocationTarget:self] AddCaptureSlideView:slideView];
@@ -475,7 +475,7 @@
         _lastMousePoint = NSZeroPoint;
     }
     [self setNeedsDisplay:YES];
-    [((MJCaptureView*)[self superview]) hideSlideShapeView];
+    [((SnipView*)[self superview]) hideSlideShapeView];
 }
 
 - (void) AddMosaicView:(MJMosaicView*) mosaicView

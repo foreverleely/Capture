@@ -8,10 +8,10 @@
 
 #import "MJMosaicView.h"
 #import "MJMosaicUtil.h"
-#import "MJCaptureView.h"
 #import "MJCaptureAssetView.h"
 #import "MJCaptureModel.h"
 #import "SnipManager.h"
+#import "SnipView.h"
 
 @implementation MJDrawerView
 
@@ -362,7 +362,7 @@
 
 - (void)changeCursor{
     MJCaptureAssetView* assetView = (MJCaptureAssetView*)[self superview];
-    MJCaptureView* captureView = (MJCaptureView*)[assetView superview];
+    SnipView* captureView = (SnipView*)[assetView superview];
     NSCursor* cursor = nil;
     if([SnipManager sharedInstance].nLineWidth == 3){
         cursor = [[[NSCursor alloc] initWithImage:[NSImage imageNamed:@"mj_capture_mosaic_brush_small"] hotSpot:NSMakePoint(4, 4)] autorelease];

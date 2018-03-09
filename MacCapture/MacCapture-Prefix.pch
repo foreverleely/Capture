@@ -14,15 +14,9 @@
 //#endif
 
 #ifndef __OPTIMIZE__
-#define NSLog(...) {}
+#define NSLog(...) NSLog(__VA_ARGS__)
 #else
 #define NSLog(...) {}
-#endif
-
-#ifndef __OPTIMIZE__
-#define NSLogM(...) NSLog(__VA_ARGS__)
-#else
-#define NSLogM(...) {}
 #endif
 
 #endif

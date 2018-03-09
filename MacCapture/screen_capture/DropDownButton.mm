@@ -8,7 +8,7 @@
 
 #import "DropDownButton.h"
 #import "MJCaptureModel.h"
-#import "MJCaptureView.h"
+#import "SnipView.h"
 #import "SnipManager.h"
 
 @implementation DropDownButton
@@ -207,7 +207,7 @@
     [self setTitle:[stritemname stringByAppendingString:@"pt"]];
     
 //    [[self window] makeFirstResponder:[self window]];
-    [((MJCaptureView*)[[self superview] superview]) makeTextViewFocus];
+    [((SnipView*)[[self superview] superview]) makeTextViewFocus];
     //fslog(@"%@", stritemname);
     //[self setNeedsDisplay:YES];
 }
@@ -221,7 +221,7 @@
 	{
 		[self runPopUp:theEvent];
 	}
-    [((MJCaptureView*)[[self superview] superview]) makeTextViewFocus];
+    [((SnipView*)[[self superview] superview]) makeTextViewFocus];
 }
 
 @end
