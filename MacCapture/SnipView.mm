@@ -188,7 +188,14 @@ const int kDRAG_POINT_LEN = 5;
   NSRect srect = [_screen frame];
   int scaleWidth = [_zoomInfoView GetImageViewWidth]/4.0;
   int scaleHeight = [_zoomInfoView GetImageViewHeight]/4.0;
-  
+  //如果_image为空，会发生崩溃
+  if (_image == nil) {
+    [_zoomInfoView setFrame:NSZeroRect];
+    [self setzoomInfoView:YES];
+    return;
+  } else {
+    [self setzoomInfoView:NO];
+  }
   //return;
   dispatch_async(dispatch_get_global_queue(0, 0), ^{
     // 追加任务1
@@ -209,6 +216,13 @@ const int kDRAG_POINT_LEN = 5;
       // 主线程更新UI
       [_zoomInfoView SetZoomImage:zoomImage];
       [_zoomInfoView SetCurrentPoint:event.locationInWindow];
+      //如果zoomImage的size为0会发生崩溃
+      if (CGSizeEqualToSize(NSSizeToCGSize(zoomImage.size), NSZeroSize)) {
+        [_zoomInfoView setFrame:NSZeroRect];
+        [self setzoomInfoView:NO];
+        return;
+      }
+      
       [zoomImage lockFocus];
       NSColor *pixelColor = NSReadPixel(NSMakePoint(zoomImage.size.width/2.0, zoomImage.size.height/2.0));
       NSColor *color = [pixelColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];

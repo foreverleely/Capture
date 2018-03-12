@@ -1199,10 +1199,8 @@
             [self mouseDraggeFromChangeFrame:pt isChangeSize:(BOOL)change event:theEvent];
         }
         [self setCursorForState:state_];
-        
-        
+      
     }
-    
     //}
     
     
@@ -1268,7 +1266,7 @@
     
     //  更新assetView的firstMouseDonwPoint、lastMousePoint
     ArrowSlideView_ = [self getArrowSlideView];
-    MJCaptureAssetView* view = (MJCaptureAssetView*)[(SnipView*)[self superview] assetView];
+    MJCaptureAssetView* view = (MJCaptureAssetView*)[(SnipView *)[self superview] assetView];
     view.firstMouseDonwPoint = [view convertPoint:[ArrowSlideView_ firstTrianglePoint_] fromView:ArrowSlideView_];
     view.lastMousePoint = [view convertPoint:[ArrowSlideView_ secondTrianglePoint_] fromView:ArrowSlideView_];
     
