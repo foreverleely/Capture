@@ -22,7 +22,7 @@ typedef enum MJCToolBarFunType{
 }MJCToolBarFunType;
 
 typedef enum MJCMouseState{
-  MJCMouseLeftBotton,       //0
+  MJCMouseLeftBotton = 0,       //0
   MJCMouseLeftMid,          //1
   MJCMouseLeftTop,          //2
   MJCMouseTopMid,           //3

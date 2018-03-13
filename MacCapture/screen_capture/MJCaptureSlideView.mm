@@ -35,12 +35,7 @@
 - (BOOL) acceptsFirstResponder{
     return YES;
 }
-//- (BOOL)becomeFirstResponder{
-//    return YES;
-//}
-//- (BOOL)resignFirstResponder{
-//    return NO;
-//}
+
 
 - (void) resignResponderDelay{
     NSView *view = self;
@@ -222,6 +217,12 @@
 }
 @end
 
+
+
+
+
+
+
 @implementation MJCaptureSlideView
 
 @synthesize funType_, nLineWidth_, nFontSize_, brushPath_, firstTrianglePoint_, secondTrianglePoint_, isPointOnPath_, isHasForcus_, isMouseDown_;
@@ -229,6 +230,7 @@
 - (void)makeForcusLater{
     [[self window] makeFirstResponder:_slideTextView];
 }
+
 - (id)initWithFrame:(NSRect)frame withType:(MJCToolBarFunType)type
 {
     self = [super initWithFrame:frame];
@@ -420,13 +422,6 @@
     return path;
 }
 - (void)drawRect:(NSRect)dirtyRect {
-    //[super drawRect:dirtyRect];
-    
-    // Drawing code here.
-//    [[NSColor blueColor] set];
-//    [[NSBezierPath bezierPathWithRect:dirtyRect] fill];
-//    return;
-    
     [_brushColor set];
     //NSLog(@"MJCaptureSlideView drawRect:  %@,  nLineWidth:%d", NSStringFromRect(dirtyRect), nLineWidth_);
     //    return;
@@ -903,6 +898,7 @@
     }
 }
 - (void)mouseDraggeMoveView:(NSPoint)pt isChangeSize:(BOOL)change event:(NSEvent*)event{
+  
     NSRect oldRect = slideShapeOldFrameRect_;
     oldRect.origin.x += (pt.x-firstMouseDonwPoint_.x);
     oldRect.origin.y += (pt.y-firstMouseDonwPoint_.y);
@@ -1118,6 +1114,7 @@
     //add by liuchipeng 2016.1.21{
     slideShapeOldFrameRect_ = [self frame];
     state_ = [self getMouseActionType:firstMouseDonwPoint_];
+  NSLog(@"MouseActionType %d",state_);
     [self setCursorForState:state_];
     //}
     
@@ -1180,7 +1177,7 @@
     [super mouseDragged:theEvent];
     NSPoint pt = theEvent.locationInWindow;
     
-    if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_ADJUST) {
+    if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_EDIT) {
         if (firstBeginDrag_) {
             BOOL change = (state_ == MJCMouseInCropMove) ? NO : YES;
             [self mouseDraggeFromChangeFrame:pt isChangeSize:(BOOL)change event:theEvent];

@@ -167,6 +167,7 @@ const int kDRAG_POINT_LEN = 5;
   
   [_toolbarView setWantsLayer:YES];
   [_assetView setWantsLayer:YES];
+  [self setWantsLayer:YES];
 }
 
 - (void)setZoomAndPointViewHide:(BOOL)isHidde {

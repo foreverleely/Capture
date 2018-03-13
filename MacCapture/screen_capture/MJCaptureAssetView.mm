@@ -400,6 +400,7 @@
             
             //aries test
             //
+          NSLog(@"new rect %@",NSStringFromRect(rect));
             [currentAddingView_ setFrame:rect];
         }
             break;

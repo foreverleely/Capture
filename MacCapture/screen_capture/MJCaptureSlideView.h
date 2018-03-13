@@ -25,36 +25,20 @@
 
 @interface MJCaptureSlideView : NSView<NSTextViewDelegate>{
     NSTrackingArea *trackingArea_;
-    
-//    NSPoint firstMouseDonwPoint_;
-//    NSPoint lastMousePoint_;
-    
+  
     MJCToolBarFunType funType_;
     int nLineWidth_;
     
     //only for brush
     NSBezierPath *brushPath_;
-    
-    //for all slide type
-//    NSColor* brushColor_;
-    
-    //only for triangleArrow
-//    NSPoint firstTrianglePoint_;
-//    NSPoint secondTrianglePoint_;
-    
-    //only for text
-//    MJCaptureSlideTextView *slideTextView_;
+  
     NSScrollView* scrollView_;
     NSPoint  leftTopPoint_;
     int  nFontSize_;
-    
     //
     BOOL isHasForcus_;
-    
-    
     //用来判断鼠标点击是否落在区域内，落在的话则向super传递鼠标事件(mouseDown\mouseUp)
     BOOL isPointOnPath_;
-    
     //用来判断鼠标点击是否落在区域内,如果落在的话，则激化选中，并使其可拖动
     BOOL isMouseDown_;
     
@@ -89,9 +73,6 @@
 - (BOOL)isPointOnPath;
 -(void)reDrawToolbarView;
 @end
-
-
-
 
 @interface MJSlideShapeView : NSView{
     NSTrackingArea *trackingArea_;
