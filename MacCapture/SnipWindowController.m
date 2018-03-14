@@ -251,12 +251,19 @@ const int kAdjustKnown = 8;
 //鼠标点击下
 - (void)mouseDown:(NSEvent *)event
 {
+  
+    NSPoint mouseLocation = [NSEvent mouseLocation];
   //双击
     if ([event clickCount] == 2) {
-        if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_HILIGHT) {
-          [self.snipView CreatSaveImage:YES];
+        //鼠标双击必须在截图圈内
+        if (!NSPointInRect(mouseLocation, self.captureWindowRect)) {
           return;
-          [self onOK];
+        }
+        
+        if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_HILIGHT) {
+          [self.snipView CreatSaveImage:NO];
+          [[SnipManager sharedInstance] endCaptureimage];
+          return;
         }
     }
   //单击 选中截屏窗口
@@ -277,7 +284,7 @@ const int kAdjustKnown = 8;
     }
     else {
       //否则显示
-        NSPoint mouseLocation = [NSEvent mouseLocation];
+      
         if (NSPointInRect(mouseLocation, self.captureWindowRect)) {
             self.rectBeginPoint = mouseLocation;
             self.rectDrawing = YES;
