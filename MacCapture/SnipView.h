@@ -37,8 +37,6 @@
 ///
 - (void)setupTrackingArea:(NSRect)rect;
 
-- (void)setupTool;
-
 - (void)setZoomAndPointViewHide:(BOOL)isHidde;
 
 - (void)ReSetZoomInfoView:(NSEvent*)event;

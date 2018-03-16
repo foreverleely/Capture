@@ -13,6 +13,7 @@
 		029A1D23204E2CFB003A3B59 /* SnipWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A1D1F204E2CFB003A3B59 /* SnipWindowController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		029A1D26204E2E88003A3B59 /* NSColor+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A1D25204E2E88003A3B59 /* NSColor+Helper.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		029A1D29204E2F25003A3B59 /* SnipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 029A1D28204E2F25003A3B59 /* SnipManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		02AC7E92205B5C8200543D10 /* File in Resources */ = {isa = PBXBuildFile; fileRef = 02AC7E91205B5C8200543D10 /* File */; };
 		B2FD1ECA1B80D81D00C86D15 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2FD1EC91B80D81D00C86D15 /* Cocoa.framework */; };
 		B2FD1ED41B80D81D00C86D15 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FD1ED21B80D81D00C86D15 /* InfoPlist.strings */; };
 		B2FD1ED61B80D81D00C86D15 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B2FD1ED51B80D81D00C86D15 /* main.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -116,6 +117,7 @@
 		029A1D27204E2F25003A3B59 /* SnipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnipManager.h; sourceTree = "<group>"; };
 		029A1D28204E2F25003A3B59 /* SnipManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnipManager.m; sourceTree = "<group>"; };
 		029A1D2A204E309E003A3B59 /* MouseEventProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MouseEventProtocol.h; sourceTree = "<group>"; };
+		02AC7E91205B5C8200543D10 /* File */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = File; sourceTree = "<group>"; };
 		B2FD1EC61B80D81D00C86D15 /* MacCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2FD1EC91B80D81D00C86D15 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B2FD1ECC1B80D81D00C86D15 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -257,6 +259,7 @@
 				029A1D24204E2E88003A3B59 /* NSColor+Helper.h */,
 				029A1D25204E2E88003A3B59 /* NSColor+Helper.m */,
 				029A1D2A204E309E003A3B59 /* MouseEventProtocol.h */,
+				02AC7E91205B5C8200543D10 /* File */,
 			);
 			name = Snip;
 			sourceTree = "<group>";
@@ -543,6 +546,7 @@
 				ECBABEBE1B86393A00B648BB /* mj_capture_ok.png in Resources */,
 				ECBABEC21B86393A00B648BB /* mj_capture_save.png in Resources */,
 				ECE8C1301D9A9548008DF82B /* mj_capture_head@2x.png in Resources */,
+				02AC7E92205B5C8200543D10 /* File in Resources */,
 				EC4F516C1B82DA07002A7851 /* corner5.png in Resources */,
 				ECE8C1351D9A9548008DF82B /* mj_capture_slider_gray.png in Resources */,
 				ECEE2B321B8EF2CA000247D9 /* mj_capture_cursor6@2x.png in Resources */,

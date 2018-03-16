@@ -12,7 +12,7 @@
 
 typedef NS_ENUM(NSInteger, CAPTURE_STATE)
 {
-  CAPTURE_STATE_HILIGHT,          //开始截图，选择窗口状态（最初的状态）
+  CAPTURE_STATE_HILIGHT = 0,          //开始截图，选择窗口状态（最初的状态）
   CAPTURE_STATE_FIRSTMOUSEDOWN,   //鼠标第一次点下去，选中截屏窗口
   CAPTURE_STATE_READYADJUST,      //正在拖动截图区域
   CAPTURE_STATE_ADJUST,           //停止拖动，跟FIRSTMOUSEDOWN状态一样

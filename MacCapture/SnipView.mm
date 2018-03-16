@@ -35,10 +35,7 @@ const int kDRAG_POINT_LEN = 5;
 {
   self = [super initWithFrame:frame];
   if (self) {
-    _funType = MJCToolBarFunRectangle;
-    _nLineWidth = 3;
-    _brushColor  = [NSColor redColor];
-    _nFontSize = 16;
+    [self setupTool];
     _isAfterClean = NO;
   }
   return self;
@@ -168,6 +165,8 @@ const int kDRAG_POINT_LEN = 5;
   [_toolbarView setWantsLayer:YES];
   [_assetView setWantsLayer:YES];
   [self setWantsLayer:YES];
+  
+  //[self.window setContentSize:_screen.frame.size];
 }
 
 - (void)setZoomAndPointViewHide:(BOOL)isHidde {
@@ -253,7 +252,7 @@ const int kDRAG_POINT_LEN = 5;
     rect.origin.y = NSMaxY(_drawingRect)-_pointInfoView.frame.size.height;
   }
   [_pointInfoView setFrame:rect];
-  [_pointInfoView SetLeftTopPoint:NSMakePoint(_drawingRect.size.width - 2 * _nLineWidth, _drawingRect.size.height - 2 * _nLineWidth)];
+  [_pointInfoView SetLeftTopPoint:NSMakePoint(_drawingRect.size.width - 2 * [SnipManager sharedInstance].nLineWidth, _drawingRect.size.height - 2 * [SnipManager sharedInstance].nLineWidth)];
 }
 
 - (void)reSetToolbarView {
@@ -283,6 +282,7 @@ const int kDRAG_POINT_LEN = 5;
   
   [_assetView removeFromSuperview];
   _assetView = [[MJCaptureAssetView alloc] initWithFrame:NSMakeRect(0, 0, 350, 40)];
+  
   [self addSubview:_assetView];
   [_assetView setHidden:YES];
   [SnipManager sharedInstance].captureState = CAPTURE_STATE_HILIGHT;
@@ -373,7 +373,7 @@ const int kDRAG_POINT_LEN = 5;
       }
     }
     if (view.isHasForcus_ && isWantMouseDown) {
-      [view setBrushColor:_brushColor];
+      [view setBrushColor:[SnipManager sharedInstance].brushColor];
       [view setNeedsDisplay:YES];
       break;
     }
@@ -385,7 +385,7 @@ const int kDRAG_POINT_LEN = 5;
   for (int i = 0; i < [array count]; i++){
     MJCaptureSlideView *view = [array objectAtIndex:i];
     if (view.funType_ == MJCToolBarFunText && view.isHasForcus_) {
-      [view setNFontSize_:_nFontSize];
+      [view setNFontSize_:[SnipManager sharedInstance].nFontSize];
       [view upSelectSlideViewFontSize];
       [view setNeedsDisplay:YES];
       break;
@@ -417,7 +417,7 @@ const int kDRAG_POINT_LEN = 5;
     //先隐藏控件
     [self hideSlideShapeView];
     
-    int sliderValue = [[MJPersistentUtil getInstance] sliderValueForType:_funType];
+    int sliderValue = [[MJPersistentUtil getInstance] sliderValueForType:[SnipManager sharedInstance].funType];
     if(sliderValue == 0){
       sliderValue = 6;
     }

@@ -224,9 +224,7 @@
     // Drawing code here.
     [bgNormalColor setFill];
     [[NSBezierPath bezierPathWithRoundedRect:[self bounds] xRadius:0 yRadius:0] fill];
-    
-    
-    
+  
     NSImage *image = [self image];
     if (image) {
         [image drawInRect:NSMakeRect((self.bounds.size.width-image.size.width)/2, dirtyRect.size.height-8-image.size.height, image.size.width, image.size.height) fromRect:NSMakeRect(0,0,image.size.width,image.size.height) operation:NSCompositeSourceOver fraction:1];

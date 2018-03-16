@@ -43,7 +43,7 @@
                                fontSize:(CGFloat)fontSize
                                  action:(SEL)action
                                    rect:(NSRect)rect{
-  
+
     MJCImageButton* button = [[[MJCImageButton alloc] initWithFrame:rect] autorelease];
     [[button cell] setBordered:NO];
     [button setTarget:self];
@@ -129,7 +129,8 @@
         btnCancel_ = [[[self addButtonWithImageID:@"mj_capture_cancel" titleID:@"取消" fontSize:12 action:@selector(btnAction:) rect:btnRect] retain] autorelease];
         btnRect.origin.x += btnWidth_ + 2 * nSpace_;
         btnOK_ = [[[self addButtonWithImageID:@"mj_capture_ok" titleID:@"确定" fontSize:12 action:@selector(btnAction:) rect:btnRect] retain] autorelease];
-        
+      
+      //[self.superview.window setContentSize:self.superview.window.frame.size];
         
         btnRect = NSMakeRect(btnRectangle_.frame.origin.x, nSpace_, btnWidth_, btnHeight_);
         btnLineWidthSmall_ = [[[self addButtonWithImageID:@"mj_capture_small_circle" titleID:@"小" fontSize:12 action:@selector(btnAction:) rect:btnRect] retain] autorelease];
@@ -555,7 +556,6 @@
         [self CreatSaveImage:NO];
         [[SnipManager sharedInstance] endCaptureimage];
     }
-    
     
     else if ([btnLineWidthSmall_ isEqual:sender]) {
         [SnipManager sharedInstance].nLineWidth = 3;

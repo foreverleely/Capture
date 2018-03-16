@@ -97,7 +97,19 @@ const int kAdjustKnown = 8;
         }
 
     }
-    //NSLogM(@"Search success, The captureWindowRect is %@",NSStringFromRect(self.captureWindowRect));
+  
+  if (![SnipUtil isPoint:mouseLocation inRect:screenFrame]) {
+    
+    NSLog(@"mouseLocation is not in screenFrame");
+    //self.captureWindowRect = CGRectZero;
+    
+  } else {
+    
+    NSLog(@"mouseLocation is in screenFrame");
+    
+  }
+  
+    NSLogM(@"Search success, The captureWindowRect is %@",NSStringFromRect(self.captureWindowRect));
     if ([SnipUtil isPoint:mouseLocation inRect:screenFrame]) {
         [self redrawView:self.originImage];
     }
@@ -109,6 +121,7 @@ const int kAdjustKnown = 8;
 
 - (void)redrawView:(NSImage *)image
 {
+  
     self.captureWindowRect = NSIntersectionRect(self.captureWindowRect, self.window.frame);
     if (image != nil && (int) self.lastRect.origin.x == (int) self.captureWindowRect.origin.x
             && (int) self.lastRect.origin.y == (int) self.captureWindowRect.origin.y
@@ -217,17 +230,17 @@ const int kAdjustKnown = 8;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotifyMouseChange:) name:kNotifyMouseLocationChange object:nil];
     //[self showWindow:nil];
-    [self captureAppScreen];
-  
-  ///add new
+    ///add new
   [self performSelector:@selector(activeCaptureViewLater) withObject:nil afterDelay:0.01];
   ///
+  
+    [self captureAppScreen];
 }
 
 - (void)activeCaptureViewLater{
   [NSApp activateIgnoringOtherApps:YES];
   [NSApp setWindowsNeedUpdate:YES];
-  [[self window] makeKeyAndOrderFront:nil];
+  [[self window] makeKeyAndOrderFront:[self window]];
   
   [[self window] becomeKeyWindow];
   [[self window] makeFirstResponder:self];
@@ -235,7 +248,7 @@ const int kAdjustKnown = 8;
 
 - (void)onNotifyMouseChange:(NSNotification *)notify
 {
-    //if (notify.userInfo[@"context"] == self) return;
+    if (notify.userInfo[@"context"] == self) return;
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_HILIGHT && self.window.isVisible && [SnipUtil isPoint:[NSEvent mouseLocation] inRect:self.window.screen.frame]) {
 
         __weak __typeof__(self) weakSelf = self;
@@ -270,8 +283,6 @@ const int kAdjustKnown = 8;
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_HILIGHT) {
         [SnipManager sharedInstance].captureState = CAPTURE_STATE_FIRSTMOUSEDOWN;
         self.startPoint = [NSEvent mouseLocation];
-      /// add new 创建所有截图框要显示的视图
-      [self.snipView setupTool];
     }
   //已经选中了截屏窗口，此时点击先记录开始点
     else if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_ADJUST) {
@@ -298,7 +309,21 @@ const int kAdjustKnown = 8;
   [self.snipView setZoomAndPointViewHide:YES];
   //显示工具栏
   [self.snipView setToolbarhidde:NO];
-   
+  
+  NSLogM(@"captureWindowRect --> %@",NSStringFromRect(self.captureWindowRect));
+  NSLogM(@"%ld",(long)[SnipManager sharedInstance].captureState);
+  /*
+    if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_FIRSTMOUSEDOWN
+        ||[SnipManager sharedInstance].captureState == CAPTURE_STATE_READYADJUST) {
+      
+      if (CGRectEqualToRect(NSRectToCGRect(self.captureWindowRect), CGRectZero)) {
+        [SnipManager sharedInstance].captureState = CAPTURE_STATE_HILIGHT;
+        [self.snipView setToolbarhidde:YES];
+        return;
+      }
+      
+    }*/
+  NSLogM(@"other");
   //第一次点击或者移动中点击放开
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_FIRSTMOUSEDOWN || [SnipManager sharedInstance].captureState == CAPTURE_STATE_READYADJUST) {
         [SnipManager sharedInstance].captureState = CAPTURE_STATE_ADJUST;
@@ -314,7 +339,7 @@ const int kAdjustKnown = 8;
         if (self.rectDrawing) {
             self.rectDrawing = NO;
             self.rectEndPoint = [NSEvent mouseLocation];
-            //[self.snipView setNeedsDisplayInRect:[self.window convertRectFromScreen:self.captureWindowRect]];
+            [self.snipView setNeedsDisplayInRect:[self.window convertRectFromScreen:self.captureWindowRect]];
         }
     }
 
@@ -432,7 +457,7 @@ const int kAdjustKnown = 8;
 {
   //如果在刚开启截图时，才去寻找鼠标所在的窗口
   //NSLogM(@"Now in %@",self.screenIdentification);
-
+  
   if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_HILIGHT) {
     //NSLogM(@"searching the hight window");
       [self captureAppScreen];
