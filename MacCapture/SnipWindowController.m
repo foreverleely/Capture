@@ -359,7 +359,7 @@ const int kAdjustKnown = 8;
     else if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_ADJUST) {
       //显示
       [self.snipView setpointInfoView:NO];
-      
+      [self.snipView setzoomInfoView:NO];
       if (self.dragDirection == -1) return;
         NSPoint mouseLocation = [NSEvent mouseLocation];
         self.endPoint = mouseLocation;

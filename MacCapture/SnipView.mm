@@ -98,6 +98,13 @@ const int kDRAG_POINT_LEN = 5;
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+  //解决从桌面顶部开始截图
+  if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_EDIT) {
+    [self setWantsLayer:YES];
+  } else {
+    [self setWantsLayer:NO];
+  }
+  
     NSDisableScreenUpdates();
     [super drawRect:dirtyRect];
 
@@ -164,7 +171,7 @@ const int kDRAG_POINT_LEN = 5;
   
   [_toolbarView setWantsLayer:YES];
   [_assetView setWantsLayer:YES];
-  [self setWantsLayer:YES];
+  //[self setWantsLayer:YES];
   
   //[self.window setContentSize:_screen.frame.size];
 }
