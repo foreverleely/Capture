@@ -97,23 +97,12 @@ const int kAdjustKnown = 8;
         }
 
     }
-  
-  if (![SnipUtil isPoint:mouseLocation inRect:screenFrame]) {
-    
-    NSLog(@"mouseLocation is not in screenFrame");
-    //self.captureWindowRect = CGRectZero;
-    
-  } else {
-    
-    NSLog(@"mouseLocation is in screenFrame");
-    
-  }
-  
-    NSLogM(@"Search success, The captureWindowRect is %@",NSStringFromRect(self.captureWindowRect));
+    //NSLog(@"capture-----%@",NSStringFromRect(self.captureWindowRect));
     if ([SnipUtil isPoint:mouseLocation inRect:screenFrame]) {
         [self redrawView:self.originImage];
     }
     else {
+      //如果鼠标点不在截屏窗口中的话，发个通知
         [self redrawView:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyMouseLocationChange object:nil userInfo:@{@"context":self}];
     }
@@ -523,4 +512,8 @@ const int kAdjustKnown = 8;
   return [[NSImage alloc] initWithData:imageData];
 }
 
+- (void)keyDown:(NSEvent *)event {
+  [[SnipManager sharedInstance] endCaptureimage];
+  [super keyDown:event];
+}
 @end

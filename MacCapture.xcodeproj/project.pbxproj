@@ -117,7 +117,7 @@
 		029A1D27204E2F25003A3B59 /* SnipManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnipManager.h; sourceTree = "<group>"; };
 		029A1D28204E2F25003A3B59 /* SnipManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnipManager.m; sourceTree = "<group>"; };
 		029A1D2A204E309E003A3B59 /* MouseEventProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MouseEventProtocol.h; sourceTree = "<group>"; };
-		02AC7E91205B5C8200543D10 /* File */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = File; sourceTree = "<group>"; };
+		02AC7E91205B5C8200543D10 /* File */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = File; sourceTree = "<group>"; };
 		B2FD1EC61B80D81D00C86D15 /* MacCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2FD1EC91B80D81D00C86D15 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B2FD1ECC1B80D81D00C86D15 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };

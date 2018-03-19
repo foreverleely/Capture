@@ -101,6 +101,7 @@ const int kKEY_ESC_CODE = 53;
         [self.windowControllerArray addObject:snipController];
         self.captureState = CAPTURE_STATE_HILIGHT;
         [snipController startCaptureWithScreen:screen];
+         NSMutableArray *array;
       
     }
 }
