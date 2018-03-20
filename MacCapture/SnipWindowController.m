@@ -97,7 +97,7 @@ const int kAdjustKnown = 8;
         }
 
     }
-    //NSLog(@"capture-----%@",NSStringFromRect(self.captureWindowRect));
+    NSLog(@"capture-----%@",NSStringFromRect(self.captureWindowRect));
     if ([SnipUtil isPoint:mouseLocation inRect:screenFrame]) {
         [self redrawView:self.originImage];
     }
@@ -125,7 +125,7 @@ const int kAdjustKnown = 8;
         [self.snipView setDrawingRect:rect];
         [self.snipView setNeedsDisplay:YES];
         self.lastRect = self.captureWindowRect;
-        //NSLog(@"redraw hilight:[%@]", NSStringFromRect(rect));
+      
     });
 
 }
@@ -245,6 +245,7 @@ const int kAdjustKnown = 8;
             __typeof__(self) strongSelf = weakSelf;
             [strongSelf showWindow:nil];
             //[self.window makeKeyAndOrderFront:nil];
+            strongSelf.lastRect = NSZeroRect;
             [strongSelf captureAppScreen];
         });
 
@@ -299,8 +300,8 @@ const int kAdjustKnown = 8;
   //显示工具栏
   [self.snipView setToolbarhidde:NO];
   
-  NSLogM(@"captureWindowRect --> %@",NSStringFromRect(self.captureWindowRect));
-  NSLogM(@"%ld",(long)[SnipManager sharedInstance].captureState);
+  //NSLogM(@"captureWindowRect --> %@",NSStringFromRect(self.captureWindowRect));
+  //NSLogM(@"%ld",(long)[SnipManager sharedInstance].captureState);
   /*
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_FIRSTMOUSEDOWN
         ||[SnipManager sharedInstance].captureState == CAPTURE_STATE_READYADJUST) {
@@ -312,7 +313,6 @@ const int kAdjustKnown = 8;
       }
       
     }*/
-  NSLogM(@"other");
   //第一次点击或者移动中点击放开
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_FIRSTMOUSEDOWN || [SnipManager sharedInstance].captureState == CAPTURE_STATE_READYADJUST) {
         [SnipManager sharedInstance].captureState = CAPTURE_STATE_ADJUST;
@@ -359,7 +359,7 @@ const int kAdjustKnown = 8;
     else if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_ADJUST) {
       //显示
       [self.snipView setpointInfoView:NO];
-      [self.snipView setzoomInfoView:NO];
+      //[self.snipView setzoomInfoView:NO];
       if (self.dragDirection == -1) return;
         NSPoint mouseLocation = [NSEvent mouseLocation];
         self.endPoint = mouseLocation;
@@ -445,13 +445,13 @@ const int kAdjustKnown = 8;
 - (void)mouseMoved:(NSEvent *)theEvent
 {
   //如果在刚开启截图时，才去寻找鼠标所在的窗口
-  //NSLogM(@"Now in %@",self.screenIdentification);
+  NSLog(@"Now in %@",self.screenIdentification);
   
   if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_HILIGHT) {
-    //NSLogM(@"searching the hight window");
+    NSLog(@"searching the hight window");
       [self captureAppScreen];
   } else {
-    //NSLogM(@"donot searching");
+    NSLog(@"donot searching");
   }
   
 }

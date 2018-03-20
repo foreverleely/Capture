@@ -6,15 +6,15 @@
 
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
-
+/*
 #ifdef DEBUG
-#define NSLog(...) NSLog(__VA_ARGS__)
+#define NSLog(...) {}//NSLog(__VA_ARGS__)
 #else
 #define NSLog(...)
 #endif
-
-#ifndef __OPTIMIZE__
-#define NSLogM(...) {}//NSLog(__VA_ARGS__)
+*/
+#ifndef DEBUG
+#define NSLogM(...) NSLog(__VA_ARGS__)
 #else
 #define NSLogM(...) {}
 #endif

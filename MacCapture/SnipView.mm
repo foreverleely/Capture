@@ -44,7 +44,7 @@ const int kDRAG_POINT_LEN = 5;
 - (void)setupTrackingArea:(NSRect)rect
 {
     self.trackingArea = [[NSTrackingArea alloc] initWithRect:rect options:NSTrackingMouseMoved | NSTrackingActiveAlways owner:self userInfo:nil];
-    NSLog(@"track init:%@", NSStringFromRect(self.frame));
+    //NSLog(@"track init:%@", NSStringFromRect(self.frame));
     [self addTrackingArea:self.trackingArea];
 }
 
