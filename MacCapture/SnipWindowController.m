@@ -256,18 +256,17 @@ const int kAdjustKnown = 8;
 {
   
     NSPoint mouseLocation = [NSEvent mouseLocation];
+  
   //双击
     if ([event clickCount] == 2) {
-        //鼠标双击必须在截图圈内
-        if (!NSPointInRect(mouseLocation, self.captureWindowRect)) {
-          return;
-        }
-        
-        if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_HILIGHT) {
-          [self.snipView CreatSaveImage:NO];
-          [[SnipManager sharedInstance] endCaptureimage];
-          return;
-        }
+      if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_HILIGHT) {
+        [self.snipView CreatSaveImage:NO];
+        [[SnipManager sharedInstance] endCaptureimage];
+        return;
+      }
+      NSLog(@"clickCount 2");
+      [self.snipView setToolbarhidde:YES];
+      return;
     }
   //单击 选中截屏窗口
     if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_HILIGHT) {
@@ -295,42 +294,46 @@ const int kAdjustKnown = 8;
 //鼠标放开
 - (void)mouseUp:(NSEvent *)theEvent
 {
+  
+  NSLog(@"mouseLocation %@",NSStringFromPoint(self.startPoint));
+  NSLog(@"mouseUp %@",NSStringFromPoint([theEvent locationInWindow]));
+  NSLog(@"window screen frame %@", NSStringFromRect(self.window.screen.frame));
+  NSLog(@"captureState %ld",[SnipManager sharedInstance].captureState);
+  //如果鼠标在桌面顶部点击并放开，则return self.startPoint
+  if (self.startPoint.y == [theEvent locationInWindow].y &&
+      self.startPoint.y == self.window.screen.frame.size.height &&
+      ([SnipManager sharedInstance].captureState == CAPTURE_STATE_FIRSTMOUSEDOWN ||
+      [SnipManager sharedInstance].captureState == CAPTURE_STATE_READYADJUST ||
+       [SnipManager sharedInstance].captureState == CAPTURE_STATE_HILIGHT)
+      ) {
+    [self.snipView setZoomAndPointViewHide:YES];
+    [self.snipView setToolbarhidde:YES];
+    [SnipManager sharedInstance].captureState = CAPTURE_STATE_HILIGHT;
+    return;
+  }
   ///鼠标放开隐藏
   [self.snipView setZoomAndPointViewHide:YES];
   //显示工具栏
   [self.snipView setToolbarhidde:NO];
   
-  //NSLogM(@"captureWindowRect --> %@",NSStringFromRect(self.captureWindowRect));
-  //NSLogM(@"%ld",(long)[SnipManager sharedInstance].captureState);
-  /*
-    if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_FIRSTMOUSEDOWN
-        ||[SnipManager sharedInstance].captureState == CAPTURE_STATE_READYADJUST) {
-      
-      if (CGRectEqualToRect(NSRectToCGRect(self.captureWindowRect), CGRectZero)) {
-        [SnipManager sharedInstance].captureState = CAPTURE_STATE_HILIGHT;
-        [self.snipView setToolbarhidde:YES];
-        return;
-      }
-      
-    }*/
   //第一次点击或者移动中点击放开
-    if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_FIRSTMOUSEDOWN || [SnipManager sharedInstance].captureState == CAPTURE_STATE_READYADJUST) {
-        [SnipManager sharedInstance].captureState = CAPTURE_STATE_ADJUST;
-        [self.snipView setNeedsDisplay:YES];
-      
-    }
-    if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_EDIT) {
-      //如果不在编辑状态
-        [self.snipView setNeedsDisplay:YES];
-    }
-    else {
-      //在编辑状态
-        if (self.rectDrawing) {
-            self.rectDrawing = NO;
-            self.rectEndPoint = [NSEvent mouseLocation];
-            [self.snipView setNeedsDisplayInRect:[self.window convertRectFromScreen:self.captureWindowRect]];
-        }
-    }
+  if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_FIRSTMOUSEDOWN || [SnipManager sharedInstance].captureState == CAPTURE_STATE_READYADJUST) {
+      [SnipManager sharedInstance].captureState = CAPTURE_STATE_ADJUST;
+      [self.snipView setNeedsDisplay:YES];
+    
+  }
+  if ([SnipManager sharedInstance].captureState != CAPTURE_STATE_EDIT) {
+    //如果不在编辑状态
+      [self.snipView setNeedsDisplay:YES];
+  }
+  else {
+    //在编辑状态
+      if (self.rectDrawing) {
+          self.rectDrawing = NO;
+          self.rectEndPoint = [NSEvent mouseLocation];
+          [self.snipView setNeedsDisplayInRect:[self.window convertRectFromScreen:self.captureWindowRect]];
+      }
+  }
 
 }
 
@@ -459,6 +462,7 @@ const int kAdjustKnown = 8;
 {
     //获取截屏的图片
     NSImage *pasteImage = [self getCaptureImage];
+  NSLog(@"pasteImage is nil %@",pasteImage == nil ? @"YES" : @"NO");
     // 把选择的截图保存到粘贴板
     if (pasteImage != nil) {
         NSPasteboard *pasteBoard = [NSPasteboard generalPasteboard];

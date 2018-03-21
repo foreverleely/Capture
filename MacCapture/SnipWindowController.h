@@ -15,5 +15,6 @@
 @property (strong) NSString* screenIdentification;
 
 - (void)startCaptureWithScreen:(NSScreen *)screen;
+
 - (void)captureAppScreen;
 @end
