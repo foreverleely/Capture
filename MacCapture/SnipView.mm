@@ -101,8 +101,6 @@ const int kDRAG_POINT_LEN = 5;
   //解决从桌面顶部开始截图
   if ([SnipManager sharedInstance].captureState == CAPTURE_STATE_EDIT) {
     [self setWantsLayer:YES];
-  } else {
-    [self setWantsLayer:NO];
   }
   
     NSDisableScreenUpdates();
@@ -170,8 +168,6 @@ const int kDRAG_POINT_LEN = 5;
   [self setZoomAndPointViewHide:YES];
   
   [_toolbarView setWantsLayer:YES];
-  [_assetView setWantsLayer:YES];
-  //[self setWantsLayer:YES];
   
   //[self.window setContentSize:_screen.frame.size];
 }
