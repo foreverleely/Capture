@@ -294,6 +294,26 @@ const int kAdjustKnown = 8;
 //鼠标放开
 - (void)mouseUp:(NSEvent *)theEvent
 {
+  NSLog(@"captureState--- %ld",[SnipManager sharedInstance].captureState);
+  NSLog(@"capture Window Rect--- %@",NSStringFromRect(_captureWindowRect));
+  //从snipManager判断另外一个window的tool是否显示
+  for (SnipWindowController *obj in [SnipManager sharedInstance].windowControllerArray) {
+    NSLog(@"obj here");
+    if (![self.screenIdentification isEqualToString:obj.screenIdentification]) {
+      NSLog(@"screenIdentification not equal");
+      if (![obj.snipView isToolbarViewHidden]) {
+        [self.snipView setToolbarhidde:YES];
+        NSLog(@"setToolbarhidde YES");
+        return;
+      }
+    }
+    
+  }
+   if (NSEqualRects(NSZeroRect, _captureWindowRect)) {
+     NSLog(@"here");
+   [self.snipView setToolbarhidde:YES];
+     return;
+   }
   
   NSLog(@"mouseLocation %@",NSStringFromPoint(self.startPoint));
   NSLog(@"mouseUp %@",NSStringFromPoint([theEvent locationInWindow]));

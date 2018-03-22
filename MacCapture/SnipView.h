@@ -62,4 +62,6 @@
 - (void)setpointInfoView:(BOOL)isHidde;
 
 - (void)CreatSaveImage:(BOOL)isSave;
+
+- (BOOL)isToolbarViewHidden;
 @end

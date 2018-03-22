@@ -175,10 +175,12 @@ const int kDRAG_POINT_LEN = 5;
 - (void)setZoomAndPointViewHide:(BOOL)isHidde {
   [_zoomInfoView setHidden:isHidde];
   [_pointInfoView setHidden:isHidde];
+  NSLog(@"set two view hide %@",isHidde ? @"YES" : @"NO");
 }
 
 - (void)setzoomInfoView:(BOOL)isHidde {
     [_zoomInfoView setHidden:isHidde];
+  NSLog(@"set _zoomInfoView hide %@",isHidde ? @"YES" : @"NO");
 }
 
 - (void)setpointInfoView:(BOOL)isHidde {
@@ -197,6 +199,7 @@ const int kDRAG_POINT_LEN = 5;
     [self setzoomInfoView:YES];
     return;
   } else {
+    NSLog(@"01here setzoomInfoView");
     [self setzoomInfoView:NO];
   }
   //return;
@@ -222,6 +225,7 @@ const int kDRAG_POINT_LEN = 5;
       //如果zoomImage的size为0会发生崩溃
       if (CGSizeEqualToSize(NSSizeToCGSize(zoomImage.size), NSZeroSize)) {
         [_zoomInfoView setFrame:NSZeroRect];
+        NSLog(@"02here setzoomInfoView");
         [self setzoomInfoView:NO];
         return;
       }
@@ -614,5 +618,9 @@ const int kDRAG_POINT_LEN = 5;
 
 - (void)rightMouseDown:(NSEvent *)event {
   [[SnipManager sharedInstance] endCaptureimage];
+}
+
+- (BOOL)isToolbarViewHidden{
+  return [self.toolbarView isHidden];
 }
 @end
