@@ -35,7 +35,7 @@ const int kKEY_ESC_CODE = 53;
       sharedSingleton.nLineWidth = 3;
       sharedSingleton.brushColor  = [NSColor redColor];
       sharedSingleton.nFontSize = 16;
-      
+      sharedSingleton.isWorking = NO;
       //空间变化时接受通知
         [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:sharedSingleton
                                                                selector:@selector(screenChanged:)
@@ -70,9 +70,9 @@ const int kKEY_ESC_CODE = 53;
 //开始截图
 - (void)startCapture
 {
-/*
+
     if (self.isWorking) return;
-    self.isWorking = YES;*/
+    self.isWorking = YES;
     self.arrayRect = [NSMutableArray array];
   //获取桌面内窗口数量
     NSArray *windows = (__bridge NSArray *) CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
